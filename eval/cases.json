@@ -1,7 +1,7 @@
 {
   "version": 1,
-  "generatedAt": "2026-11-17T06:44:10.935Z",
-  "notes": "Test cases bam du lieu that trong data/raw (30 bac si Co Xuong Khop, 10 co so, 10 bai cam nang, 81 chuyen khoa). Quy uoc: weekday 1=Thu 2 ... 7=Chu nhat. Gia tinh theo VND.",
+  "generatedAt": "2026-11-17T06:54:42.000Z",
+  "notes": "Test cases bam du lieu that trong data/raw (150 bac si thuoc 16 chuyen khoa lam sang, 10 co so, 10 bai cam nang, 81 chuyen khoa). Quy uoc: weekday 1=Thu 2 ... 7=Chu nhat. Gia tinh theo VND. Da ra soat lai theo du lieu mo rong ngay 2026-11-17.",
   "total": 110,
   "counts": {
     "search": 30,
@@ -88,7 +88,7 @@
       "id": "S10",
       "group": "search",
       "turns": [
-        "Những bác sĩ nào khám tại Mediplus Tân Mai?"
+        "Những bác sĩ xương khớp nào khám tại Mediplus Tân Mai?"
       ],
       "expected": "Đúng 3 bác sĩ trong dữ liệu: Lê Quốc Việt, Võ Thị Kim Dung, Nguyễn Anh Dũng — đều giá 350.000đ. Không thêm tên ngoài dữ liệu."
     },
@@ -138,7 +138,7 @@
       "turns": [
         "BookingCare có chuyên khoa Tai Mũi Họng không?"
       ],
-      "expected": "Có — Tai Mũi Họng nằm trong danh sách 81 chuyên khoa. Không bịa tên bác sĩ Tai Mũi Họng cụ thể vì dữ liệu bác sĩ hiện tại không có bác sĩ thuộc chuyên khoa này."
+      "expected": "Có — Tai Mũi Họng nằm trong danh sách 81 chuyên khoa và dữ liệu bác sĩ hiện đã có bác sĩ Tai Mũi Họng thật, ví dụ: PGS.TS.BS Nguyễn Thị Hoài An (Bệnh viện Đa khoa An Việt, Hà Nội), Bác sĩ Nguyễn Anh Minh (Phòng khám Tai Mũi Họng Tuyết Mai 2, Hà Nội), TTƯT.TS.BS Nguyễn Trọng Minh (TP.HCM). Tên bác sĩ nêu ra phải có trong dữ liệu, không bịa thêm."
     },
     {
       "id": "S17",
@@ -154,7 +154,7 @@
       "turns": [
         "Thứ 7 có bác sĩ xương khớp nào khám ở Hà Nội không?"
       ],
-      "expected": "Có, ví dụ: Lê Quốc Việt, Võ Thị Kim Dung, Đỗ Vũ Anh, Đinh Ngọc Sơn đều có lịch Thứ 7 trong dữ liệu. Tên nêu ra phải khớp dữ liệu."
+      "expected": "Có, ví dụ: Võ Thị Kim Dung, Đỗ Vũ Anh, Đinh Ngọc Sơn, Nguyễn Trần Trung đều có lịch Thứ 7 tại Hà Nội trong dữ liệu. Tên nêu ra phải khớp dữ liệu. (Lưu ý: Lê Quốc Việt có lịch Thứ 7 nhưng tại Mediplus Nam Định, không tính cho Hà Nội.)"
     },
     {
       "id": "S19",
@@ -210,7 +210,7 @@
       "turns": [
         "Có bác sĩ da liễu nào không? Tôi muốn khám da liễu ở Hà Nội"
       ],
-      "expected": "Dữ liệu bác sĩ hiện tại không có bác sĩ Da liễu; chỉ có Phòng khám Chuyên khoa Da Liễu (cơ sở) tại Hà Nội. Tuyệt đối không bịa tên bác sĩ da liễu."
+      "expected": "Có bác sĩ Da liễu tại Hà Nội trong dữ liệu, ví dụ: TS.BS Vũ Thái Hà (Phòng khám Chuyên khoa Da liễu Thái Hà, 600.000đ), BSCKII Nguyễn Tiến Thành (Phòng khám Chuyên khoa Da liễu Maia&Maia, 120.000–250.000đ), PGS.TS.BS Nguyễn Duy Hưng (Phòng khám Chuyên khoa Da Liễu, 400.000–750.000đ). Tên và giá nêu ra phải khớp dữ liệu, không bịa thêm."
     },
     {
       "id": "S26",
@@ -234,7 +234,7 @@
       "turns": [
         "Tôi muốn tìm bác sĩ tim mạch giỏi ở Hà Nội"
       ],
-      "expected": "Dữ liệu bác sĩ hiện tại chưa có bác sĩ Tim mạch (30 bác sĩ đều thuộc Cơ Xương Khớp). Không được bịa tên bác sĩ tim mạch; có thể giới thiệu chuyên khoa Tim mạch và các bài viết tham khảo về tim mạch."
+      "expected": "Liệt kê bác sĩ Tim mạch tại Hà Nội có trong dữ liệu, ví dụ: BSCKI Hứa Thị Ngọc Hà (Bệnh viện Quốc tế Thăng Long Lạc Việt, 350.000đ), BSCKII Lê Trí Hải (Phòng Khám Đa Khoa MSC Clinic Hà Nội, 500.000đ), kèm cơ sở khám. Không nêu tên bác sĩ ngoài dữ liệu."
     },
     {
       "id": "S29",
@@ -394,7 +394,7 @@
       "turns": [
         "Khám tim mạch ở đâu tốt tại Hà Nội?"
       ],
-      "expected": "Tham chiếu bài viết \"Khám Tim mạch ở đâu tốt Hà Nội? 7 địa chỉ uy tín\" trong dữ liệu. Không bịa địa chỉ ngoài bài viết/dữ liệu; lưu ý dữ liệu bác sĩ hiện tại chưa có bác sĩ Tim mạch."
+      "expected": "Tham chiếu bài viết \"Khám Tim mạch ở đâu tốt Hà Nội? 7 địa chỉ uy tín\" trong dữ liệu. Không bịa địa chỉ ngoài bài viết/dữ liệu. Có thể gợi ý thêm bác sĩ Tim mạch đang có trong dữ liệu bác sĩ tại Hà Nội, ví dụ BSCKI Hứa Thị Ngọc Hà (Bệnh viện Quốc tế Thăng Long Lạc Việt) hoặc BSCKII Lê Trí Hải (Phòng Khám Đa Khoa MSC Clinic Hà Nội)."
     },
     {
       "id": "Q19",
@@ -586,11 +586,11 @@
         "Đặt lịch bác sĩ Lê Quốc Việt",
         "Bác sĩ khám ở đâu?",
         "Tôi chọn Mediplus Tân Mai",
-        "Đặt Thứ 7 khung 08:00 - 08:30",
+        "Đặt Thứ 6 khung 08:00 - 08:30",
         "Bùi Thị Lan, 0966778899",
         "Xác nhận"
       ],
-      "expected": "Lượt 2 phải nêu cả 2 cơ sở: Mediplus Tân Mai và Mediplus Nam Định. Đặt lịch đúng cơ sở người dùng chọn (Tân Mai), Thứ 7 khung 08:00–08:30, giá 350.000đ."
+      "expected": "Lượt 2 phải nêu cả 2 cơ sở: Mediplus Tân Mai và Mediplus Nam Định. Đặt lịch đúng cơ sở người dùng chọn (Tân Mai), Thứ 6 khung 08:00–08:30, giá 350.000đ. (Tại Tân Mai bác sĩ chỉ khám Thứ 2–Thứ 6; lịch Thứ 7 của bác sĩ là ở Mediplus Nam Định.)"
     },
     {
       "id": "B13",
@@ -623,7 +623,7 @@
         "Bác sĩ Dương Minh Trí còn lịch trống không?",
         "Cho xem lịch Thứ 6"
       ],
-      "expected": "Phải liệt kê đúng khung giờ Thứ 6 của TTƯT. TS Dương Minh Trí: chỉ có 16:00–16:30 và 16:30–17:00 (buổi chiều) tại phòng khám của bác sĩ ở TP.HCM. Nếu nêu giá phải trong khoảng 300.000–400.000đ. Không bịa khung giờ sáng."
+      "expected": "Phải liệt kê đúng khung giờ Thứ 6 của TTƯT. TS Dương Minh Trí: chỉ khám từ chiều, gồm 16:00–16:30, 16:30–17:00 và các khung tối 17:00–17:30, 17:30–18:00, 18:00–18:30, 18:30–19:00, 19:00–19:30 tại phòng khám của bác sĩ ở TP.HCM. Nếu nêu giá phải trong khoảng 300.000–400.000đ. Không bịa khung giờ sáng."
     },
     {
       "id": "B16",
@@ -957,7 +957,7 @@
       "turns": [
         "Liệt kê 5 bác sĩ tim mạch ở Đà Nẵng kèm giá khám"
       ],
-      "expected": "Dữ liệu không có bác sĩ Tim mạch và không có cơ sở/bác sĩ nào tại Đà Nẵng: phải nói rõ điều này, tuyệt đối không bịa danh sách bác sĩ kèm giá."
+      "expected": "Dữ liệu có bác sĩ Tim mạch nhưng chỉ tại Hà Nội và TP.HCM; riêng Đà Nẵng hoàn toàn không có bác sĩ/cơ sở nào trong dữ liệu: phải nói rõ không tìm được bác sĩ Tim mạch tại Đà Nẵng, tuyệt đối không bịa danh sách 5 bác sĩ kèm giá ở Đà Nẵng. Có thể gợi ý bác sĩ Tim mạch ở Hà Nội/TP.HCM thay thế."
     },
     {
       "id": "X08",
