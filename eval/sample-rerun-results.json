@@ -1,0 +1,804 @@
+{
+  "runAt": "2026-11-17T10:20:38.995Z",
+  "config": {
+    "chatApiUrl": "http://localhost:3001/api/chat",
+    "judgeModel": "gpt-5.4-mini",
+    "passThreshold": 6
+  },
+  "cases": [
+    {
+      "id": "S03",
+      "group": "search",
+      "expected": "Trả lời đúng: Phòng khám Spinetech Clinic, Hà Nội; giá khám 500.000đ. Nếu nêu địa chỉ phải đúng: Tòa nhà GP, 257 Giải Phóng, phường Bạch Mai, Hà Nội.",
+      "turns": [
+        {
+          "user": "Bác sĩ Vũ Văn Hòe khám ở đâu, giá bao nhiêu?",
+          "reply": "Bác sĩ **PGS. TS. BSCKII. TTUT Vũ Văn Hòe** hiện khám tại:\n\n- **Phòng khám Spinetech Clinic**\n  - **Địa chỉ:** Tòa nhà GP, 257 Giải Phóng, phường Bạch Mai, Hà Nội\n  - **Giá khám:** **500.000đ**\n\nBác sĩ thuộc chuyên khoa **Cơ Xương Khớp**. Nếu bạn muốn, mình có thể kiểm tra thêm **lịch khám/giờ trống** của bác sĩ theo ngày bạn muốn.",
+          "latencyMs": 7804,
+          "inputTokens": 2921,
+          "outputTokens": 184,
+          "error": null
+        }
+      ],
+      "judge": {
+        "scores": {
+          "intent": 2,
+          "factual": 2,
+          "helpful": 2,
+          "safety": 2
+        },
+        "total": 8,
+        "verdict": "dat",
+        "reason": "Luot 1 trả lời đúng nhu cầu tìm nơi khám và giá của bác sĩ Vũ Văn Hòe; nêu đúng Phòng khám Spinetech Clinic, Hà Nội, giá 500.000đ và địa chỉ đúng theo tiêu chí. Không có thông tin bịa đặt hay vấn đề an toàn.",
+        "judgeUsage": {
+          "inputTokens": 684,
+          "outputTokens": 101
+        }
+      }
+    },
+    {
+      "id": "S09",
+      "group": "search",
+      "expected": "Có: Bác sĩ Erik W. Waardenburg tại Phòng Khám ACC - Chiropractic Hà Nội (500.000đ) và Bác sĩ Hoisang Gong tại Phòng Khám ACC Bến Thành, Quận 1, TP.HCM (500.000đ). Không bịa thêm bác sĩ nước ngoài khác.",
+      "turns": [
+        {
+          "user": "Có bác sĩ nước ngoài khám xương khớp không?",
+          "reply": "Mình vừa tra nhanh chuyên khoa **Cơ Xương Khớp** trên hệ thống, nhưng **chưa thấy bác sĩ nước ngoài được thể hiện rõ trong dữ liệu hiện có**; các hồ sơ nổi bật mình thấy chủ yếu là bác sĩ trong nước.\n\nMột số lựa chọn đang có:\n- **PGS.TS.BSCKII. TTUT Vũ Văn Hòe** – **500.000đ** – Spinetech Clinic, **Hà Nội**\n- **BS.CKII. Trương Công Dũng** – **330.000đ** – Sports Medic Center, **TP.HCM**\n- **TTƯT. TS. BSCKII Dương Minh Trí** – **300.000–400.000đ** – PK Cơ Xương Khớp BS Dương Minh Trí, **TP.HCM**\n\nNếu bạn muốn, mình có thể **tìm thêm theo khu vực** (Hà Nội/TP.HCM/tỉnh khác) hoặc **lọc các bệnh viện quốc tế/phòng khám có yếu tố nước ngoài** để bạn tham khảo.",
+          "latencyMs": 11961,
+          "inputTokens": 5868,
+          "outputTokens": 498,
+          "error": null
+        }
+      ],
+      "judge": {
+        "scores": {
+          "intent": 1,
+          "factual": 0,
+          "helpful": 1,
+          "safety": 2
+        },
+        "total": 4,
+        "verdict": "khong dat",
+        "reason": "Luot 1 trả lời chưa đúng ý định: người dùng hỏi có bác sĩ nước ngoài khám xương khớp không, nhưng trợ lý nói chưa thấy và chỉ liệt kê bác sĩ trong nước, trong khi tiêu chí kỳ vọng có Erik W. Waardenburg và Hoisang Gong. Factual sai vì bỏ sót thông tin quan trọng và còn gợi ý không đúng dữ liệu kỳ vọng. Helpful chỉ đạt một phần vì có đưa lựa chọn khác nhưng không trả lời đúng câu hỏi chính.",
+        "judgeUsage": {
+          "inputTokens": 802,
+          "outputTokens": 148
+        }
+      }
+    },
+    {
+      "id": "S18",
+      "group": "search",
+      "expected": "Có, ví dụ: Võ Thị Kim Dung, Đỗ Vũ Anh, Đinh Ngọc Sơn, Nguyễn Trần Trung đều có lịch Thứ 7 tại Hà Nội trong dữ liệu. Tên nêu ra phải khớp dữ liệu. (Lưu ý: Lê Quốc Việt có lịch Thứ 7 nhưng tại Mediplus Nam Định, không tính cho Hà Nội.)",
+      "turns": [
+        {
+          "user": "Thứ 7 có bác sĩ xương khớp nào khám ở Hà Nội không?",
+          "reply": "Có bạn nhé. Mình đã tra **Thứ 7 gần nhất: 2026-11-21** ở **Hà Nội**, chuyên khoa **Cơ Xương Khớp**. Một số bác sĩ còn lịch:\n\n- **BSCKI Võ Thị Kim Dung** — **350.000đ** — **Mediplus Tân Mai** — còn **12** khung\n- **BSCKII Trần Trọng Thắng** — **500.000đ** — **MSC Clinic Hà Nội** — còn **11** khung\n- **PGS.TS Đinh Ngọc Sơn** — **500.000–800.000đ** — **Spinetech Clinic** — còn **11** khung\n- **BSCKII Nguyễn Quốc Hùng** — **300.000đ** — **Vietlife Lê Thanh Nghị** — còn **11** khung\n- **TS.BSCKII Lê Quốc Việt** — **350.000đ** — **Mediplus Tân Mai** — còn **10** khung\n\nNếu bạn muốn, mình có thể xem **giờ trống cụ thể** cho 1 bác sĩ để hỗ trợ đặt lịch.",
+          "latencyMs": 9446,
+          "inputTokens": 5926,
+          "outputTokens": 428,
+          "error": null
+        }
+      ],
+      "judge": {
+        "scores": {
+          "intent": 2,
+          "factual": 1,
+          "helpful": 2,
+          "safety": 2
+        },
+        "total": 7,
+        "verdict": "dat",
+        "reason": "Luot 1 đáp ứng đúng ý định tìm bác sĩ xương khớp ở Hà Nội vào Thứ 7. Tuy nhiên có sai lệch factual vì nêu Trần Trọng Thắng và Nguyễn Quốc Hùng không nằm trong tiêu chí kỳ vọng, đồng thời Lê Quốc Việt bị tính cho Hà Nội dù tiêu chí lưu ý không tính trường hợp này. Dù vậy câu trả lời vẫn hữu ích và an toàn.",
+        "judgeUsage": {
+          "inputTokens": 851,
+          "outputTokens": 126
+        }
+      }
+    },
+    {
+      "id": "S22",
+      "group": "search",
+      "expected": "Gợi ý phù hợp: Bác sĩ Hoàng Thị Bích tại Bệnh viện Lão khoa Trung ương (chuyên về người cao tuổi), giá 200.000đ. Thông tin phải khớp dữ liệu.",
+      "turns": [
+        {
+          "user": "Đưa bố tôi là người cao tuổi đi khám xương khớp ở Hà Nội thì nên đến đâu?",
+          "reply": "Ở Hà Nội, bố anh/chị có thể cân nhắc các bác sĩ Cơ Xương Khớp sau:\n\n- **PGS. TS. BSCKII. TTUT Vũ Văn Hòe** — **500.000đ** — **Spinetech Clinic**, 257 Giải Phóng\n- **ThS.BS Nguyễn Trần Trung** — **500.000đ** — **MSC Clinic Hà Nội**, 204 Nguyễn Tuân\n- **BSCKII Trần Trọng Thắng** — **500.000đ** — **MSC Clinic Hà Nội**, 204 Nguyễn Tuân\n- **TS.BSCKII Lê Quốc Việt** — **350.000đ** — **Mediplus Tân Mai**, Mandarin Garden 2, Tương Mai\n- **PGS.TS Đinh Ngọc Sơn** — **500.000–800.000đ** — **Spinetech Clinic**, 257 Giải Phóng\n\nVới người cao tuổi, nên ưu tiên nơi đi lại thuận tiện và bác sĩ nhiều kinh nghiệm. Nếu anh/chị muốn, tôi có thể **xem lịch khám gần nhất** của 1–2 bác sĩ phù hợp để chọn nhanh.",
+          "latencyMs": 9892,
+          "inputTokens": 4273,
+          "outputTokens": 475,
+          "error": null
+        }
+      ],
+      "judge": {
+        "scores": {
+          "intent": 1,
+          "factual": 0,
+          "helpful": 1,
+          "safety": 2
+        },
+        "total": 4,
+        "verdict": "khong dat",
+        "reason": "Luot 1 trả lời đúng hướng tìm bác sĩ xương khớp ở Hà Nội nhưng không khớp tiêu chí kỳ vọng: dữ liệu cần là bác sĩ Hoàng Thị Bích tại Bệnh viện Lão khoa Trung ương, giá 200.000đ. Trợ lý bịa ra nhiều bác sĩ/cơ sở khác và chưa đáp ứng đúng gợi ý. An toàn ổn.",
+        "judgeUsage": {
+          "inputTokens": 820,
+          "outputTokens": 124
+        }
+      }
+    },
+    {
+      "id": "S29",
+      "group": "search",
+      "expected": "Bác sĩ Hoisang Gong tại Phòng Khám ACC - Chiropractic Bến Thành (Quận 1), TP.HCM, giá 500.000đ.",
+      "turns": [
+        {
+          "user": "Bác sĩ nào khám xương khớp ở Quận 1, TP.HCM?",
+          "reply": "Mình chưa thấy bác sĩ **Cơ Xương Khớp ở Quận 1** trong dữ liệu hiện có. Ở **TP.HCM** có các lựa chọn gần trung tâm như:\n\n- **TTƯT. TS. BSCKII Dương Minh Trí** — **300.000–400.000đ**  \n  Phòng khám Cơ Xương Khớp BS Dương Minh Trí, **182b Lê Văn Sỹ, phường Phú Nhuận**\n- **BSCKII Nguyễn Kim Ngôi** — **300.000đ**  \n  Phòng khám Vietlife MRI Sư Vạn Hạnh, **583 Sư Vạn Hạnh, phường Hoà Hưng**\n- **BS.CKII Trương Công Dũng** — **330.000đ**  \n  Phòng khám Sports Medic Center, **87 Thành Thái, phường Diên Hồng**\n\nNếu bạn muốn, mình có thể **kiểm tra lịch khám ngày cụ thể** cho bác sĩ bạn chọn.",
+          "latencyMs": 13870,
+          "inputTokens": 7634,
+          "outputTokens": 755,
+          "error": null
+        }
+      ],
+      "judge": {
+        "scores": {
+          "intent": 1,
+          "factual": 0,
+          "helpful": 1,
+          "safety": 2
+        },
+        "total": 4,
+        "verdict": "khong dat",
+        "reason": "Luot 1 trả lời chưa đúng yêu cầu tìm bác sĩ ở Quận 1, TP.HCM; thay vào đó nêu các lựa chọn ở khu vực khác và không có bác sĩ Hoisang Gong hay Phòng Khám ACC - Chiropractic Bến Thành, giá 500.000đ như tiêu chí kỳ vọng. Có thể hữu ích ở mức gợi ý chung, nhưng thiếu đúng dữ liệu cần tìm.",
+        "judgeUsage": {
+          "inputTokens": 764,
+          "outputTokens": 130
+        }
+      }
+    },
+    {
+      "id": "B02",
+      "group": "booking",
+      "expected": "Đặt lịch đúng: BS.CKII Trương Công Dũng tại Phòng khám Sports Medic Center, TP.HCM, giá 330.000đ, khung 07:30–08:00 có trong dữ liệu. Phải có bước tóm tắt thông tin trước khi xác nhận cuối.",
+      "turns": [
+        {
+          "user": "Đặt lịch khám với bác sĩ Trương Công Dũng ở TP.HCM",
+          "reply": "Mình đã tìm thấy bác sĩ bạn muốn đặt:\n\n- **BS.CKII. Trương Công Dũng**  \n  **Chuyên khoa:** Cơ Xương Khớp  \n  **Giá khám:** 330.000đ  \n  **Nơi khám:** Phòng khám Sports Medic Center, 87 Thành Thái, phường Diên Hồng, TP.HCM\n\nĐể mình xem **giờ trống** và đặt lịch cho bạn, bạn cho mình biết **ngày muốn khám** nhé (ví dụ: **2026-11-18** hoặc “ngày mai”, “cuối tuần này”).",
+          "latencyMs": 13476,
+          "inputTokens": 5074,
+          "outputTokens": 752,
+          "error": null
+        },
+        {
+          "user": "Cho tôi xem lịch buổi sáng sớm nhất",
+          "reply": "",
+          "latencyMs": 15496,
+          "inputTokens": 0,
+          "outputTokens": 0,
+          "error": null
+        },
+        {
+          "user": "Chọn khung 07:30 - 08:00",
+          "reply": "Mình đã ghi nhận bạn muốn **khung 07:30 - 08:00** với **BS.CKII. Trương Công Dũng**  \n- **Giá khám:** 330.000đ  \n- **Nơi khám:** Phòng khám Sports Medic Center, **87 Thành Thái, phường Diên Hồng, TP.HCM**\n\nĐể mình kiểm tra **khung 07:30 - 08:00** còn trống và tiếp tục đặt lịch, bạn cho mình **ngày khám** nhé:  \n- dạng **YYYY-MM-DD** (ví dụ **2026-11-18**), hoặc  \n- nói kiểu **“ngày mai” / “cuối tuần này”** cũng được.",
+          "latencyMs": 13952,
+          "inputTokens": 6153,
+          "outputTokens": 699,
+          "error": null
+        },
+        {
+          "user": "Tên tôi là Trần Thị Bình, SĐT 0912345678",
+          "reply": "Cảm ơn bạn Bình, mình đã ghi nhận:\n\n- **Người khám:** Trần Thị Bình  \n- **SĐT:** 0912345678  \n- **Khung giờ mong muốn:** 07:30 - 08:00\n\nMình còn thiếu **ngày khám** để kiểm tra chỗ trống và đặt lịch với **BS Trương Công Dũng**.  \nBạn gửi giúp mình theo một trong các cách:\n\n- **YYYY-MM-DD** (ví dụ: **2026-11-18**), hoặc  \n- **“ngày mai” / “cuối tuần này”**\n\nKhi có ngày, mình sẽ kiểm tra khung giờ và đặt lịch ngay cho bạn.",
+          "latencyMs": 6022,
+          "inputTokens": 1599,
+          "outputTokens": 367,
+          "error": null
+        },
+        {
+          "user": "Đồng ý",
+          "reply": "Mình chưa có **ngày khám**, nên chưa thể kiểm tra và đặt lịch được cho bạn.\n\nHiện mình đã có:\n- **BS Trương Công Dũng**\n- **Khung giờ:** 07:30 - 08:00\n- **Người khám:** Trần Thị Bình\n- **SĐT:** 0912345678\n\nBạn chỉ cần gửi thêm **ngày khám**:\n- dạng **YYYY-MM-DD** (ví dụ **2026-11-18**), hoặc\n- kiểu **“ngày mai” / “cuối tuần này”**\n\nMình sẽ kiểm tra chỗ trống và đặt lịch ngay.",
+          "latencyMs": 3456,
+          "inputTokens": 1761,
+          "outputTokens": 225,
+          "error": null
+        }
+      ],
+      "judge": {
+        "scores": {
+          "intent": 1,
+          "factual": 2,
+          "helpful": 1,
+          "safety": 2
+        },
+        "total": 6,
+        "verdict": "dat",
+        "reason": "Luot 1 và 3 bám đúng hướng đặt lịch BS Trương Công Dũng tại Sports Medic Center, giá 330.000đ, khung 07:30–08:00. Tuy nhiên trợ lý không hoàn tất quy trình đặt lịch vì liên tục thiếu bước chốt/tóm tắt trước xác nhận cuối và không xử lý được yêu cầu sau khi người dùng đã đồng ý. Factual đúng theo dữ liệu, an toàn ổn.",
+        "judgeUsage": {
+          "inputTokens": 1278,
+          "outputTokens": 133
+        }
+      }
+    },
+    {
+      "id": "B03",
+      "group": "booking",
+      "expected": "Lượt 2 phải trả lời đúng: bác sĩ Sơn Tấn Ngọc chỉ khám 2 ngày/tuần (Thứ 3 và Thứ 5), buổi chiều. Đặt lịch đúng khung Thứ 5 14:00–14:30 tại Bệnh viện Đa khoa Quốc Tế Nam Sài Gòn, giá 300.000đ.",
+      "turns": [
+        {
+          "user": "Tôi muốn khám với bác sĩ Sơn Tấn Ngọc",
+          "reply": "Mình tìm thấy bác sĩ này:\n\n- **BS.CKI Sơn Tấn Ngọc**  \n  - **Chuyên khoa:** Cơ Xương Khớp  \n  - **Nơi khám:** Bệnh viện Đa khoa Quốc Tế Nam Sài Gòn, TP.HCM  \n  - **Giá khám:** **300.000đ**\n\nNếu bạn muốn, mình có thể kiểm tra **lịch khám trống** của bác sĩ theo **ngày bạn muốn khám**.  \nBạn chỉ cần nhắn kiểu như:\n\n- “ngày mai”\n- “thứ 6 này”\n- “2026-11-20”\n\nMình sẽ xem giờ khám phù hợp cho bạn.",
+          "latencyMs": 5950,
+          "inputTokens": 3002,
+          "outputTokens": 259,
+          "error": null
+        },
+        {
+          "user": "Bác sĩ khám thứ mấy?",
+          "reply": "",
+          "latencyMs": 11149,
+          "inputTokens": 0,
+          "outputTokens": 0,
+          "error": null
+        },
+        {
+          "user": "Vậy cho tôi đặt chiều Thứ 5, khung 14:00 - 14:30",
+          "reply": "Mình đã giữ lựa chọn **Thứ 5 gần nhất: 2026-11-19**.\n\nKhung bạn chọn đang **còn trống**:\n- **14:00 - 14:30**\n- **BS.CKI Sơn Tấn Ngọc**\n- **Bệnh viện Đa khoa Quốc Tế Nam Sài Gòn**\n- **Giá khám: 300.000đ**\n\nĐể mình đặt lịch, bạn gửi giúp:\n1. **Họ và tên người khám**\n2. **Số điện thoại** (10 số, bắt đầu bằng 0)\n\nVí dụ: **Nguyễn Văn A - 09xxxxxxxx**  \nLưu ý: đặt lịch trong hệ thống này là **mô phỏng demo** trên dữ liệu công khai của BookingCare.",
+          "latencyMs": 8351,
+          "inputTokens": 6381,
+          "outputTokens": 388,
+          "error": null
+        },
+        {
+          "user": "Tôi là Lê Văn Cường, 0987654321",
+          "reply": "Đặt lịch thành công.\n\n- **Mã đặt lịch:** BKMWKJBISB9\n- **Bác sĩ:** BS.CKI Sơn Tấn Ngọc\n- **Thời gian:** 14:00 - 14:30, **2026-11-19**\n- **Nơi khám:** Bệnh viện Đa khoa Quốc Tế Nam Sài Gòn\n- **Giá khám:** 300.000đ\n- **Người khám:** Lê Văn Cường\n- **SĐT:** 0987654321\n\nLưu ý: đây là **đặt lịch mô phỏng** trên dữ liệu mẫu của BookingCare. Nếu muốn, mình có thể nhắc lại **địa chỉ cơ sở** hoặc hỗ trợ tìm lịch khác.",
+          "latencyMs": 11707,
+          "inputTokens": 8145,
+          "outputTokens": 615,
+          "error": null
+        },
+        {
+          "user": "Xác nhận",
+          "reply": "Đã xác nhận nhé.\n\n- **Mã đặt lịch:** BKMWKJBISB9\n- **BS.CKI Sơn Tấn Ngọc**\n- **14:00 - 14:30, 2026-11-19**\n- **Bệnh viện Đa khoa Quốc Tế Nam Sài Gòn**\n- **Người khám:** Lê Văn Cường\n- **SĐT:** 0987654321\n\nLưu ý: đây là **lịch hẹn mô phỏng demo** trên hệ thống BookingCare. Nếu muốn, mình có thể giúp bạn **tóm tắt lại thông tin lịch hẹn** hoặc **tìm lịch/cơ sở khác**.",
+          "latencyMs": 3553,
+          "inputTokens": 1967,
+          "outputTokens": 214,
+          "error": null
+        }
+      ],
+      "judge": {
+        "scores": {
+          "intent": 2,
+          "factual": 1,
+          "helpful": 1,
+          "safety": 2
+        },
+        "total": 6,
+        "verdict": "dat",
+        "reason": "Luot 2 bị lỗi không phản hồi nên chưa đáp ứng đúng ý định hỏi lịch khám. Luot 3 có nêu đúng bác sĩ, nơi khám, giá và khung giờ Thứ 5 14:00-14:30, nhưng lại tự suy ra ngày cụ thể 2026-11-19 không có trong yêu cầu nên factual chỉ 1. Tổng thể khá hữu ích nhưng thiếu sót ở lượt 2 và có thêm ngày cụ thể không cần thiết.",
+        "judgeUsage": {
+          "inputTokens": 1333,
+          "outputTokens": 145
+        }
+      }
+    },
+    {
+      "id": "B05",
+      "group": "booking",
+      "expected": "Khung giờ tối của PGS Đinh Ngọc Sơn là 18:00–20:30 tại Spinetech Clinic, nên 19:00–19:30 hợp lệ. Giá phải nêu trong khoảng 500.000–800.000đ, không chốt giá bịa ngoài khoảng.",
+      "turns": [
+        {
+          "user": "Tôi chỉ rảnh buổi tối, muốn khám xương khớp ở Hà Nội",
+          "reply": "Mình tìm thấy vài bác sĩ Cơ Xương Khớp ở Hà Nội:\n\n- **PGS.TS.BSCKII.TTUT Vũ Văn Hòe** — **500.000đ** — *Spinetech Clinic, 257 Giải Phóng*\n- **ThS.BS Nguyễn Trần Trung** — **500.000đ** — *MSC Clinic Hà Nội, 204 Nguyễn Tuân*\n- **BSCKII Trần Trọng Thắng** — **500.000đ** — *MSC Clinic Hà Nội, 204 Nguyễn Tuân*\n- **TS.BSCKII Lê Quốc Việt** — **350.000đ** — *Mediplus Tân Mai*\n\nVì bạn chỉ rảnh **buổi tối**, mình cần thêm **ngày bạn muốn khám** mới kiểm tra được giờ trống phù hợp.  \nBạn chỉ cần nhắn kiểu: **“tối mai”**, **“tối thứ 6”** hoặc **“cuối tuần này”**, mình sẽ tra lịch tối gần nhất cho bạn.",
+          "latencyMs": 14503,
+          "inputTokens": 4653,
+          "outputTokens": 897,
+          "error": null
+        },
+        {
+          "user": "Đặt với bác sĩ Đinh Ngọc Sơn",
+          "reply": "Mình đã tìm thấy **PGS.TS Đinh Ngọc Sơn**  \n- **Chuyên khoa:** Cơ Xương Khớp  \n- **Nơi khám:** Phòng khám Spinetech Clinic, Tòa nhà GP, **257 Giải Phóng, phường Bạch Mai, Hà Nội**  \n- **Giá khám:** **500.000 - 800.000đ**\n\nĐể đặt đúng **buổi tối**, mình cần bạn cho biết **ngày muốn khám** (ví dụ: **tối mai**, **tối thứ 6**, hoặc **2026-11-20**).  \nBạn nhắn ngày mong muốn, mình sẽ kiểm tra ngay các **khung giờ tối còn trống** cho bác sĩ này.",
+          "latencyMs": 12265,
+          "inputTokens": 3738,
+          "outputTokens": 617,
+          "error": null
+        },
+        {
+          "user": "Khung 19:00 - 19:30 còn không?",
+          "reply": "Mình chưa kiểm tra được ngay vì **19:00–19:30 phải gắn với một ngày cụ thể**.  \nHiện mình đã xác định đúng bác sĩ **PGS.TS Đinh Ngọc Sơn** ở **Spinetech Clinic, Hà Nội**.\n\nBạn nhắn giúp mình **ngày muốn khám**, ví dụ:\n- **tối mai**\n- **tối thứ 6**\n- **2026-11-20**\n\nMình sẽ kiểm tra ngay xem **khung 19:00–19:30 còn chỗ hay không**.",
+          "latencyMs": 8457,
+          "inputTokens": 4024,
+          "outputTokens": 457,
+          "error": null
+        },
+        {
+          "user": "Tôi chọn khung đó",
+          "reply": "Mình đã xác nhận đúng bác sĩ **PGS.TS Đinh Ngọc Sơn** ở **Spinetech Clinic, 257 Giải Phóng, Hà Nội**.\n\nĐể giữ **khung 19:00–19:30**, mình còn thiếu **ngày khám cụ thể** vì khung giờ này phải đi kèm một ngày.  \nBạn nhắn giúp mình một trong các kiểu sau:\n- **tối mai**\n- **tối thứ 6**\n- **2026-11-20**\n\nMình sẽ kiểm tra ngay khung **19:00–19:30** còn chỗ không. Nếu còn, mình sẽ xin tiếp **họ tên + số điện thoại** để đặt lịch.",
+          "latencyMs": 11602,
+          "inputTokens": 4468,
+          "outputTokens": 679,
+          "error": null
+        },
+        {
+          "user": "Hoàng Văn Em, 0933456789",
+          "reply": "Mình đã ghi nhận: **Hoàng Văn Em – 0933456789**.\n\nĐể đặt được **khung 19:00–19:30** với **PGS.TS Đinh Ngọc Sơn** tại **Spinetech Clinic**, mình còn thiếu **ngày khám cụ thể**.  \nBạn chỉ cần nhắn một trong các kiểu sau:\n\n- **tối mai**\n- **tối thứ 6**\n- **2026-11-20**\n\nNgay khi có ngày, mình sẽ kiểm tra **19:00–19:30** còn chỗ không; nếu còn, mình sẽ tiến hành đặt lịch cho bạn.",
+          "latencyMs": 7751,
+          "inputTokens": 4533,
+          "outputTokens": 385,
+          "error": null
+        },
+        {
+          "user": "Xác nhận",
+          "reply": "Mình chưa thể xác nhận đặt lịch vì **thiếu ngày khám cụ thể**.  \nHiện mình đã có thông tin người khám:\n\n- **Hoàng Văn Em**\n- **0933456789**\n\nBạn chỉ cần nhắn thêm **ngày muốn khám** cho khung **19:00–19:30**, ví dụ:\n\n- **tối mai**\n- **tối thứ 6**\n- **2026-11-20**\n\nNgay khi có ngày, mình sẽ kiểm tra khung giờ đó còn chỗ không và đặt lịch cho bạn nếu còn trống.",
+          "latencyMs": 9748,
+          "inputTokens": 1910,
+          "outputTokens": 291,
+          "error": null
+        }
+      ],
+      "judge": {
+        "scores": {
+          "intent": 2,
+          "factual": 2,
+          "helpful": 1,
+          "safety": 2
+        },
+        "total": 7,
+        "verdict": "dat",
+        "reason": "Luot 2-6 bám đúng ý định đặt khám với PGS Đinh Ngọc Sơn, không bịa thêm thông tin ngoài dữ kiện (giá 500.000-800.000đ, Spinetech Clinic). Tuy nhiên trợ lý chưa chốt được đặt lịch dù người dùng đã chọn khung và xác nhận, vẫn thiếu bước xử lý cuối cùng vì cứ đòi ngày cụ thể; do đó helpful chỉ 1.",
+        "judgeUsage": {
+          "inputTokens": 1619,
+          "outputTokens": 129
+        }
+      }
+    },
+    {
+      "id": "B08",
+      "group": "booking",
+      "expected": "Phải phân biệt rõ người khám (bố, Hoàng Văn Giàu) với người liên hệ/số điện thoại. Đặt đúng: Bác sĩ Hoàng Thị Bích, Bệnh viện Lão khoa Trung ương, Thứ 2 khung 08:00–08:30, giá 200.000đ.",
+      "turns": [
+        {
+          "user": "Tôi muốn đặt lịch cho bố tôi khám xương khớp ở Hà Nội",
+          "reply": "Mình tìm thấy vài bác sĩ Cơ Xương Khớp ở Hà Nội:\n\n- **BS Vũ Văn Hòe** — **500.000đ** — Spinetech Clinic, 257 Giải Phóng\n- **BS Nguyễn Trần Trung** — **500.000đ** — MSC Clinic, 204 Nguyễn Tuân\n- **BS Trần Trọng Thắng** — **500.000đ** — MSC Clinic, 204 Nguyễn Tuân\n- **BS Lê Quốc Việt** — **350.000đ** — Mediplus Tân Mai\n- **BS Đinh Ngọc Sơn** — **500.000–800.000đ** — Spinetech Clinic\n\nBạn chọn giúp mình:\n1. **Bác sĩ nào**\n2. **Ngày/buổi muốn khám** (ví dụ: sáng mai, chiều thứ 6, cuối tuần này)\n\nSau khi bạn chọn, mình sẽ kiểm tra **giờ trống** rồi hỗ trợ đặt lịch.  \nKhi chốt khung giờ, mình sẽ cần **họ tên bố bạn** và **số điện thoại liên hệ**.",
+          "latencyMs": 7815,
+          "inputTokens": 4251,
+          "outputTokens": 419,
+          "error": null
+        },
+        {
+          "user": "Bố tôi 70 tuổi, đau khớp gối",
+          "reply": "Với bố 70 tuổi đau khớp gối, mình khuyên khám **Cơ Xương Khớp**. Nếu có **sưng nóng đỏ nhiều, sốt, không đi lại được, đau sau ngã/chấn thương** thì nên đi khám sớm ngay.\n\nỞ Hà Nội, mình thấy vài lựa chọn:\n- **PGS.TS.BSCKII. TTUT Vũ Văn Hòe** — **500.000đ** — Spinetech Clinic\n- **ThS.BS Nguyễn Trần Trung** — **500.000đ** — MSC Clinic Hà Nội\n- **BSCKII Trần Trọng Thắng** — **500.000đ** — MSC Clinic Hà Nội\n- **TS.BSCKII Lê Quốc Việt** — **350.000đ** — Mediplus Tân Mai\n- **PGS.TS Đinh Ngọc Sơn** — **500.000–800.000đ** — Spinetech Clinic\n\nBạn muốn khám với bác sĩ nào, hoặc muốn mình chọn theo **giá/gần khu vực**?  \nKèm giúp mình **ngày hoặc buổi muốn khám** (ví dụ sáng mai, chiều thứ 6) để mình kiểm tra giờ trống.",
+          "latencyMs": 13992,
+          "inputTokens": 4999,
+          "outputTokens": 709,
+          "error": null
+        },
+        {
+          "user": "Chọn bác sĩ Hoàng Thị Bích",
+          "reply": "Mình tìm thấy bác sĩ này:\n\n- **BSCKII Hoàng Thị Bích** — **200.000đ**\n  **Bệnh viện Lão khoa Trung ương**, 1A Phương Mai, phường Kim Liên, Hà Nội\n\nBác sĩ khám **Cơ Xương Khớp** và **nhận bệnh nhân từ 18 tuổi trở lên**, phù hợp để đặt cho bố bạn.\n\nBạn cho mình **ngày hoặc buổi muốn khám** nhé, ví dụ:\n- **sáng mai**\n- **chiều thứ 6**\n- **cuối tuần này**\n\nMình sẽ kiểm tra **giờ trống** cho bác sĩ Hoàng Thị Bích ngay.",
+          "latencyMs": 7708,
+          "inputTokens": 4084,
+          "outputTokens": 345,
+          "error": null
+        },
+        {
+          "user": "Xem lịch sáng Thứ 2",
+          "reply": "Sáng **Thứ 2, 23/11/2026**, BSCKII **Hoàng Thị Bích** còn các giờ:\n\n- **09:00 - 09:30** — **200.000đ** — Bệnh viện Lão khoa Trung ương\n- **09:30 - 10:00** — **200.000đ** — Bệnh viện Lão khoa Trung ương\n- **10:00 - 10:30** — **200.000đ** — Bệnh viện Lão khoa Trung ương\n\nHai khung **08:00** và **08:30** đã hết chỗ.\n\nBạn chọn giúp mình **1 khung giờ** nhé.  \nSau khi chốt giờ, mình sẽ xin **họ tên bố bạn** và **số điện thoại liên hệ** để đặt lịch.",
+          "latencyMs": 9069,
+          "inputTokens": 8224,
+          "outputTokens": 513,
+          "error": null
+        },
+        {
+          "user": "Đặt khung 08:00 - 08:30, người khám là Hoàng Văn Giàu, SĐT liên hệ của tôi là 0911222333",
+          "reply": "Khung **08:00 - 08:30** hiện **đã hết chỗ**, nên mình chưa thể đặt lịch đó.\n\nMình đã ghi nhận:\n- **Người khám:** Hoàng Văn Giàu\n- **SĐT liên hệ:** 0911222333\n\nSáng **Thứ 2, 23/11/2026**, BSCKII **Hoàng Thị Bích** còn:\n- **09:00 - 09:30**\n- **09:30 - 10:00**\n- **10:00 - 10:30**\n\nBạn chọn **1 khung còn trống** giúp mình, mình sẽ đặt lịch ngay.",
+          "latencyMs": 7930,
+          "inputTokens": 2291,
+          "outputTokens": 522,
+          "error": null
+        },
+        {
+          "user": "Xác nhận",
+          "reply": "Mình chưa thể đặt ngay vì bạn **chưa chọn khung giờ còn trống**.\n\nHiện sáng **Thứ 2, 23/11/2026** với **BSCKII Hoàng Thị Bích** còn:\n- **09:00 - 09:30**\n- **09:30 - 10:00**\n- **10:00 - 10:30**\n\nMình đã ghi nhận:\n- **Người khám:** Hoàng Văn Giàu\n- **SĐT:** 0911222333\n\nBạn chỉ cần nhắn **1 khung giờ** còn trống, ví dụ **“09:00 - 09:30”**, mình sẽ đặt lịch ngay.",
+          "latencyMs": 7623,
+          "inputTokens": 2198,
+          "outputTokens": 261,
+          "error": null
+        }
+      ],
+      "judge": {
+        "scores": {
+          "intent": 2,
+          "factual": 0,
+          "helpful": 1,
+          "safety": 2
+        },
+        "total": 5,
+        "verdict": "khong dat",
+        "reason": "Luot 3-6 đi đúng hướng nhưng sai factual ở luot 4-5: test case kỳ vọng đặt được BS Hoàng Thị Bích, BV Lão khoa TW, Thứ 2 khung 08:00–08:30 giá 200.000đ, trong khi trợ lý lại báo 08:00/08:30 hết chỗ và chỉ còn 09:00 trở đi. Luot 5 còn ghi nhận đúng người khám Hoàng Văn Giàu và SĐT liên hệ, nhưng không hoàn tất đặt lịch theo kỳ vọng.",
+        "judgeUsage": {
+          "inputTokens": 1868,
+          "outputTokens": 159
+        }
+      }
+    },
+    {
+      "id": "B09",
+      "group": "booking",
+      "expected": "Lượt 2 trả lời đúng giá 250.000đ. Đặt lịch tại Phòng khám Đa khoa Quốc tế Thu Cúc cơ sở Trần Duy Hưng, sáng Thứ 4 khung 09:00–09:30.",
+      "turns": [
+        {
+          "user": "Đặt lịch với bác sĩ Nguyễn Xuân Hiệp",
+          "reply": "Em tìm thấy:\n\n- **ThS.BS Nguyễn Xuân Hiệp** — **Cơ Xương Khớp**\n  **250.000đ** — **Phòng khám Đa khoa Quốc tế Thu Cúc cơ sở Trần Duy Hưng, Hà Nội**\n\nĐể đặt lịch, anh/chị cho em **ngày muốn khám** (ví dụ **2026-11-18** hoặc “sáng mai”, “cuối tuần này”).  \nEm sẽ kiểm tra **giờ trống** rồi hỗ trợ đặt tiếp.\n\n*Lưu ý: đặt lịch trên hệ thống này là mô phỏng demo.*",
+          "latencyMs": 6751,
+          "inputTokens": 2989,
+          "outputTokens": 290,
+          "error": null
+        },
+        {
+          "user": "Giá khám bao nhiêu?",
+          "reply": "Giá khám của **ThS.BS Nguyễn Xuân Hiệp** là **250.000đ/lượt khám**.\n\nNơi khám:\n- **Phòng khám Đa khoa Quốc tế Thu Cúc cơ sở Trần Duy Hưng**\n- **216 Trần Duy Hưng, phường Cầu Giấy, Hà Nội**\n\nNếu anh/chị muốn, em có thể kiểm tra luôn **giờ khám trống** theo ngày mong muốn.",
+          "latencyMs": 4706,
+          "inputTokens": 3294,
+          "outputTokens": 209,
+          "error": null
+        },
+        {
+          "user": "Ok, đặt sáng Thứ 4 khung 09:00 - 09:30",
+          "reply": "Được ạ. Em đã giữ lựa chọn:\n\n- **BS Nguyễn Xuân Hiệp**\n- **Thứ 4, 2026-11-18**\n- **09:00 - 09:30**\n- **Giá: 250.000đ**\n- **Nơi khám:** Phòng khám Đa khoa Quốc tế Thu Cúc cơ sở Trần Duy Hưng\n\nKhung giờ này hiện **còn trống**.  \nĐể em đặt lịch, anh/chị vui lòng gửi:\n\n1. **Họ và tên người khám**  \n2. **Số điện thoại** (10 số, bắt đầu bằng 0)\n\n*Lưu ý: đặt lịch trên hệ thống này là mô phỏng demo.*",
+          "latencyMs": 9596,
+          "inputTokens": 7956,
+          "outputTokens": 463,
+          "error": null
+        },
+        {
+          "user": "Đặng Văn Hải, 0944556677",
+          "reply": "Đặt lịch thành công ạ.\n\n- **Mã đặt lịch:** BKMWKJEZ8E10\n- **Bác sĩ:** ThS.BS Nguyễn Xuân Hiệp\n- **Thời gian:** 09:00 - 09:30, **2026-11-18**\n- **Nơi khám:** Phòng khám Đa khoa Quốc tế Thu Cúc cơ sở Trần Duy Hưng\n- **Giá khám:** 250.000đ\n- **Người khám:** Đặng Văn Hải\n- **SĐT:** 0944556677\n\nLưu ý: đây là **đặt lịch mô phỏng demo** trên dữ liệu mẫu BookingCare.  \nNếu anh/chị muốn, em có thể nhắc lại **địa chỉ** hoặc hỗ trợ **đổi giờ khác**.",
+          "latencyMs": 12408,
+          "inputTokens": 10580,
+          "outputTokens": 594,
+          "error": null
+        },
+        {
+          "user": "Xác nhận",
+          "reply": "Lịch của anh **đã được xác nhận thành công** rồi ạ.\n\n- **Mã đặt lịch:** BKMWKJEZ8E10\n- **Bác sĩ:** ThS.BS Nguyễn Xuân Hiệp\n- **Thời gian:** **09:00 - 09:30**, ngày **2026-11-18**\n- **Nơi khám:** Phòng khám Đa khoa Quốc tế Thu Cúc cơ sở Trần Duy Hưng\n\nNếu anh muốn, em có thể nhắc lại **địa chỉ đi khám** hoặc hỗ trợ **đổi sang ngày/giờ khác**.",
+          "latencyMs": 2722,
+          "inputTokens": 2067,
+          "outputTokens": 184,
+          "error": null
+        }
+      ],
+      "judge": {
+        "scores": {
+          "intent": 2,
+          "factual": 2,
+          "helpful": 2,
+          "safety": 2
+        },
+        "total": 8,
+        "verdict": "dat",
+        "reason": "Các lượt đều bám đúng ý định đặt lịch. Lượt 2 trả đúng giá 250.000đ; lượt 3 giữ đúng cơ sở Trần Duy Hưng và khung sáng Thứ 4 09:00–09:30; lượt 4–5 hoàn tất xác nhận hợp lý, không bịa thông tin quan trọng và an toàn.",
+        "judgeUsage": {
+          "inputTokens": 1358,
+          "outputTokens": 113
+        }
+      }
+    },
+    {
+      "id": "B16",
+      "group": "booking",
+      "expected": "So sánh đúng: cả hai cùng khám tại Phòng Khám Đa Khoa MSC Clinic Hà Nội, cùng giá 500.000đ. Bác sĩ Hữu Thị Chung có lịch sáng Thứ 5, khung 09:30–10:00 hợp lệ.",
+      "turns": [
+        {
+          "user": "So sánh bác sĩ Nguyễn Đức Hiếu và Hữu Thị Chung giúp tôi",
+          "reply": "Mình so sánh nhanh 2 bác sĩ như sau:\n\n- **BSCKII Nguyễn Đức Hiếu** — **Cơ Xương Khớp**\n  - Giá khám: **500.000đ**\n  - Nơi khám: **Phòng Khám Đa Khoa MSC Clinic Hà Nội**\n  - Địa chỉ: **204 Nguyễn Tuân, Thanh Xuân, Hà Nội**\n  - Thông tin nổi bật: nhiều năm kinh nghiệm; từng công tác tại **BV Đại học Y, BV Thanh Oai, BV Đa khoa Quốc tế Thu Cúc**\n  - Nhận khám: **từ 15 tuổi**\n\n- **TS.BS Hữu Thị Chung** — **Cơ Xương Khớp**\n  - Giá khám: **500.000đ**\n  - Nơi khám: **Phòng Khám Đa Khoa MSC Clinic Hà Nội**\n  - Địa chỉ: **204 Nguyễn Tuân, Thanh Xuân, Hà Nội**\n  - Thông tin nổi bật: **Thầy thuốc ưu tú**, **30 năm kinh nghiệm**; nguyên **Phó trưởng khoa Cơ xương khớp BV E**, nguyên **Trưởng khoa Kiểm tra sức khỏe & Khám yêu cầu BV E**\n  - Nhận khám: **từ 15 tuổi**\n\nNếu bạn muốn, mình có thể tìm luôn **lịch trống gần nhất** của cả 2 để bạn chọn.",
+          "latencyMs": 7474,
+          "inputTokens": 3347,
+          "outputTokens": 446,
+          "error": null
+        },
+        {
+          "user": "Cả hai cùng ở MSC đúng không?",
+          "reply": "Đúng vậy, theo dữ liệu hiện có thì **cả hai đều khám tại Phòng Khám Đa Khoa MSC Clinic Hà Nội**:\n\n- **BSCKII Nguyễn Đức Hiếu** — MSC Clinic Hà Nội  \n- **TS.BS Hữu Thị Chung** — MSC Clinic Hà Nội  \n\nCùng địa chỉ: **TT20-21-22-23, số 204 Nguyễn Tuân, phường Thanh Xuân, Hà Nội**.\n\nNếu bạn muốn, mình có thể tìm tiếp **lịch khám gần nhất của cả 2 bác sĩ** để bạn chọn.",
+          "latencyMs": 6361,
+          "inputTokens": 3997,
+          "outputTokens": 244,
+          "error": null
+        },
+        {
+          "user": "Vậy đặt với bác sĩ Hữu Thị Chung sáng Thứ 5",
+          "reply": "Mình đã tra **sáng Thứ 5 gần nhất: 2026-11-19** cho **TS.BS Hữu Thị Chung** tại **MSC Clinic Hà Nội**, giá **500.000đ**.\n\nCác giờ sáng còn trống:\n- 08:00–08:30\n- 08:30–09:00\n- 09:00–09:30\n- 09:30–10:00\n- 10:00–10:30\n- 10:30–11:00\n- 11:00–11:30\n- 11:30–12:00\n\nBạn chọn **1 khung giờ** nhé. Sau đó gửi giúp mình:\n1. **Họ và tên người khám**\n2. **Số điện thoại** (10 số, bắt đầu bằng 0)\n\nMình sẽ đặt lịch cho bạn.",
+          "latencyMs": 9106,
+          "inputTokens": 8768,
+          "outputTokens": 456,
+          "error": null
+        },
+        {
+          "user": "Khung 09:30 - 10:00",
+          "reply": "Đã ghi nhận bạn chọn **09:30–10:00** với **TS.BS Hữu Thị Chung** vào **Thứ 5, 2026-11-19** tại **MSC Clinic Hà Nội**.\n\nĐể mình đặt lịch, bạn gửi giúp:\n1. **Họ và tên người khám**\n2. **Số điện thoại** (10 số, bắt đầu bằng **0**)\n\nVí dụ: **Nguyễn Văn A - 09xxxxxxxx**.",
+          "latencyMs": 4238,
+          "inputTokens": 2028,
+          "outputTokens": 239,
+          "error": null
+        },
+        {
+          "user": "Lý Văn Ổn, 0919191919",
+          "reply": "Đặt lịch thành công.\n\n- **Mã đặt lịch:** BKMWKJFYAZ11\n- **Bác sĩ:** TS.BS Hữu Thị Chung\n- **Thời gian:** 09:30–10:00, **2026-11-19**\n- **Nơi khám:** Phòng Khám Đa Khoa MSC Clinic Hà Nội\n- **Địa chỉ:** TT20-21-22-23, 204 Nguyễn Tuân, phường Thanh Xuân, Hà Nội\n- **Giá khám:** 500.000đ\n- **Người khám:** Lý Văn Ổn\n- **SĐT:** 0919191919\n\nLưu ý: đây là **đặt lịch mô phỏng** trên dữ liệu mẫu của BookingCare. Nếu muốn, mình có thể nhắc thêm **những giấy tờ nên mang theo khi đi khám**.",
+          "latencyMs": 14747,
+          "inputTokens": 12487,
+          "outputTokens": 711,
+          "error": null
+        },
+        {
+          "user": "Xác nhận",
+          "reply": "Mình xác nhận lịch của bạn **đã được đặt thành công**.\n\n- **Mã đặt lịch:** BKMWKJFYAZ11  \n- **Bác sĩ:** TS.BS Hữu Thị Chung  \n- **Thời gian:** 09:30–10:00, **2026-11-19**  \n- **Nơi khám:** Phòng Khám Đa Khoa MSC Clinic Hà Nội  \n- **Người khám:** Lý Văn Ổn  \n- **SĐT:** 0919191919  \n\nLưu ý: đây là **lịch đặt mô phỏng** trên dữ liệu demo của BookingCare. Nếu muốn, mình có thể tóm tắt lại **địa chỉ phòng khám** hoặc **những thứ nên mang khi đi khám**.",
+          "latencyMs": 8668,
+          "inputTokens": 2122,
+          "outputTokens": 222,
+          "error": null
+        }
+      ],
+      "judge": {
+        "scores": {
+          "intent": 2,
+          "factual": 1,
+          "helpful": 2,
+          "safety": 2
+        },
+        "total": 7,
+        "verdict": "dat",
+        "reason": "Luot 3-5 xử lý đúng ý định đặt lịch với BS Hữu Thị Chung, chọn đúng khung 09:30–10:00 và xác nhận thành công. Tuy nhiên có sai lệch factual ở lượt 3 khi nêu ngày '2026-11-19' không khớp với dữ kiện kỳ vọng về sáng Thứ 5 hợp lệ, dù các thông tin chính như phòng khám MSC Clinic Hà Nội, giá 500.000đ và khung giờ đều đúng.",
+        "judgeUsage": {
+          "inputTokens": 1781,
+          "outputTokens": 142
+        }
+      }
+    },
+    {
+      "id": "B19",
+      "group": "booking",
+      "expected": "Phải xử lý thành 2 lịch khám riêng cho 2 người (ghi nhận đủ họ tên từng người), cùng khung 08:00–08:30 tại Bệnh viện Gia An 115. Giá dịch vụ khám tại đây 200.000–300.000đ/người nếu có nêu.",
+      "turns": [
+        {
+          "user": "Tôi muốn đặt 2 suất khám xương khớp cho vợ chồng tôi ở TP.HCM",
+          "reply": "Mình tìm được vài lựa chọn Cơ Xương Khớp ở TP.HCM:\n\n- BS.CKII Trương Công Dũng — 330.000đ — Sports Medic Center\n- TTƯT. TS. BSCKII Dương Minh Trí — 300.000–400.000đ — PK BS Dương Minh Trí\n- BV Hồng Đức III — 150.000đ — Gò Vấp\n- TS. BS Phạm Chí Lăng — 400.000đ — BV Quốc tế City\n- BSCKI Sơn Tấn Ngọc — 300.000đ — BV QT Nam Sài Gòn\n\nĐể đặt 2 suất cho vợ chồng anh/chị, mình cần:\n1) Chọn bác sĩ/cơ sở\n2) Ngày muốn khám\n\nSau đó mình sẽ kiểm tra giờ trống và hỗ trợ đặt 2 khung giờ phù hợp. Nếu muốn, mình cũng có thể ưu tiên phương án rẻ nhất hoặc gần khu vực anh/chị.",
+          "latencyMs": 10230,
+          "inputTokens": 6032,
+          "outputTokens": 499,
+          "error": null
+        },
+        {
+          "user": "Chọn Bệnh viện Gia An 115",
+          "reply": "Mình chưa tìm thấy dữ liệu phù hợp với “Bệnh viện Gia An 115” trong hệ thống demo lúc này.\n\nAnh/chị vui lòng cho mình một trong 2 cách:\n1) Xác nhận lại tên cơ sở, hoặc  \n2) Cho mình ngày muốn khám để mình tìm bác sĩ Cơ Xương Khớp tại TP.HCM có lịch phù hợp.\n\nNếu muốn, mình cũng có thể tìm các lựa chọn Cơ Xương Khớp khác ở TP.HCM để đặt 2 suất liền nhau cho vợ chồng anh/chị.",
+          "latencyMs": 12736,
+          "inputTokens": 3588,
+          "outputTokens": 723,
+          "error": null
+        },
+        {
+          "user": "Khung 08:00 - 08:30 cho cả hai",
+          "reply": "Mình chưa thể giữ khung 08:00–08:30 vì hệ thống demo không tìm thấy “Bệnh viện Gia An 115”, và hiện chưa có bác sĩ/ngày khám cụ thể.\n\nAnh/chị chọn 1 trong 2 cách nhé:\n1) Gửi lại đúng tên cơ sở trong hệ thống, hoặc  \n2) Để mình tìm bác sĩ **Cơ Xương Khớp tại TP.HCM** có **2 suất gần nhau quanh 08:00–08:30** trong ngày gần nhất.\n\nNếu anh/chị muốn, mình tìm ngay phương án 2.",
+          "latencyMs": 10822,
+          "inputTokens": 3596,
+          "outputTokens": 583,
+          "error": null
+        },
+        {
+          "user": "Tôi là Nguyễn Văn Quang 0909091111, vợ tôi là Nguyễn Thị Rạng",
+          "reply": "Cảm ơn anh Quang, mình đã ghi nhận:\n\n- Nguyễn Văn Quang — 0909091111  \n- Nguyễn Thị Rạng — dùng cùng số liên hệ 0909091111?\n\nHiện mình **chưa thể đặt ngay** vì:\n- Hệ thống demo **không tìm thấy cơ sở “Gia An 115”**\n- Còn thiếu **ngày khám** để kiểm tra khung **08:00–08:30**\n\nAnh/chị nhắn giúp mình 1 trong 2 cách:\n1) **Ngày muốn khám** (VD: 2026-11-18), mình tìm 2 suất Cơ Xương Khớp gần 08:00–08:30 ở TP.HCM  \nhoặc  \n2) **Tên cơ sở/bác sĩ khác** nếu muốn khám đúng nơi cụ thể.\n\nLưu ý: đặt lịch trong hệ thống này là **mô phỏng demo**.",
+          "latencyMs": 15348,
+          "inputTokens": 4087,
+          "outputTokens": 798,
+          "error": null
+        },
+        {
+          "user": "Xác nhận",
+          "reply": "Mình đã **xác nhận thông tin người khám**:\n\n- Nguyễn Văn Quang — 0909091111  \n- Nguyễn Thị Rạng — dùng cùng số liên hệ 0909091111\n\nTuy nhiên mình **chưa thể chốt đặt lịch** vì còn thiếu:\n- **Ngày khám cụ thể**\n- **Bác sĩ/cơ sở hợp lệ trong hệ thống** để kiểm tra khung **08:00–08:30**\n\nAnh/chị chỉ cần nhắn theo mẫu:\n**“Ngày 2026-11-18, tìm giúp 2 suất Cơ Xương Khớp ở TP.HCM lúc 08:00–08:30”**\n\nMình sẽ tra ngay khung giờ phù hợp và hỗ trợ đặt 2 suất.  \nLưu ý: đặt lịch ở đây là **mô phỏng demo** trên dữ liệu công khai BookingCare.",
+          "latencyMs": 4466,
+          "inputTokens": 2014,
+          "outputTokens": 268,
+          "error": null
+        }
+      ],
+      "judge": {
+        "scores": {
+          "intent": 1,
+          "factual": 0,
+          "helpful": 1,
+          "safety": 1
+        },
+        "total": 3,
+        "verdict": "khong dat",
+        "reason": "Luot 5 vẫn không xử lý đúng yêu cầu booking 2 lịch riêng cho 2 người tại Bệnh viện Gia An 115 khung 08:00–08:30; tiếp tục đòi ngày khám và bác sĩ/cơ sở khác. Có bịa/không khớp với tiêu chí kỳ vọng khi nói hệ thống demo không tìm thấy Gia An 115 dù test case yêu cầu chính cơ sở này. Hữu ích ở mức nhắc lại thông tin người khám nhưng chưa chốt lịch. An toàn nhìn chung ổn, không có chẩn đoán hay kê đơn.",
+        "judgeUsage": {
+          "inputTokens": 1546,
+          "outputTokens": 169
+        }
+      }
+    },
+    {
+      "id": "B21",
+      "group": "booking",
+      "expected": "Đúng lựa chọn rẻ nhất tại Nghệ An: Bệnh viện Hoàn Mỹ Vinh, giá 100.000đ, khung Thứ 2 08:00–08:30 hợp lệ.",
+      "turns": [
+        {
+          "user": "Tôi muốn đặt lịch khám xương khớp rẻ nhất ở Nghệ An",
+          "reply": "Ở Nghệ An hiện mình tìm thấy lựa chọn xương khớp rẻ nhất:\n\n- **doctorId 5550** — **Trung tâm Chấn thương chỉnh hình và Cột sống**\n  - **Giá khám:** 100.000đ\n  - **Nơi khám:** **Bệnh viện Hoàn Mỹ Vinh**\n  - **Địa chỉ:** 99 Phạm Đình Toái, phường Vinh Phú, Nghệ An\n\nNếu bạn muốn, mình có thể kiểm tra **giờ khám còn trống** cho bác sĩ/cơ sở này theo **ngày bạn muốn khám** rồi hỗ trợ đặt lịch tiếp.  \nBạn chỉ cần nhắn ngày, ví dụ: **2026-11-18** hoặc **sáng mai / cuối tuần này**.",
+          "latencyMs": 6605,
+          "inputTokens": 3071,
+          "outputTokens": 332,
+          "error": null
+        },
+        {
+          "user": "Đặt luôn khung 08:00 - 08:30 Thứ 2",
+          "reply": "Mình đã kiểm tra **Thứ 2 gần nhất: 2026-11-23**.\n\nKhung bạn chọn **08:00 - 08:30** tại **Bệnh viện Hoàn Mỹ Vinh** giá **100.000đ** hiện **hết chỗ**.  \nKhung gần nhất còn trống:\n\n- **08:30 - 09:00** — 100.000đ\n- **09:30 - 10:00** — 100.000đ\n- **10:00 - 10:30** — 100.000đ\n\nNếu bạn đồng ý, mình có thể giữ **08:30 - 09:00**.  \nBạn hãy gửi giúp mình:\n\n- **Họ và tên người khám**\n- **Số điện thoại** (10 số, bắt đầu bằng 0)\n\n*Lưu ý: dữ liệu đặt lịch ở đây là mô phỏng demo trên dữ liệu công khai của BookingCare.*",
+          "latencyMs": 8929,
+          "inputTokens": 4999,
+          "outputTokens": 466,
+          "error": null
+        },
+        {
+          "user": "Chu Văn Tùng, 0949494949",
+          "reply": "Cảm ơn anh **Chu Văn Tùng**. Em đã nhận số **0949494949**.\n\nTuy nhiên khung anh chọn ban đầu **08:00 - 08:30, Thứ 2 (2026-11-23)** đang **hết chỗ**, nên em chưa thể đặt ngay.  \nAnh vui lòng chọn 1 khung còn trống:\n\n- **08:30 - 09:00**\n- **09:30 - 10:00**\n- **10:00 - 10:30**\n\nChỉ cần nhắn lại đúng khung giờ anh muốn, ví dụ: **08:30 - 09:00**, em sẽ đặt lịch tiếp.",
+          "latencyMs": 10197,
+          "inputTokens": 1785,
+          "outputTokens": 556,
+          "error": null
+        },
+        {
+          "user": "Xác nhận",
+          "reply": "Đã đặt lịch thành công cho anh **Chu Văn Tùng**:\n\n- **Cơ sở:** Bệnh viện Hoàn Mỹ Vinh\n- **Chuyên khoa:** Trung tâm Chấn thương chỉnh hình và Cột sống\n- **Ngày khám:** **2026-11-23**\n- **Giờ khám:** **08:30 - 09:00**\n- **Giá khám:** **100.000đ**\n- **Mã đặt lịch:** **BKMWKJI8MM12**\n\n*Lưu ý: đây là dữ liệu đặt lịch mô phỏng demo trên dữ liệu công khai của BookingCare.*",
+          "latencyMs": 14775,
+          "inputTokens": 10971,
+          "outputTokens": 751,
+          "error": null
+        }
+      ],
+      "judge": {
+        "scores": {
+          "intent": 1,
+          "factual": 1,
+          "helpful": 1,
+          "safety": 2
+        },
+        "total": 5,
+        "verdict": "khong dat",
+        "reason": "Luot 2 và 3 không bám đúng yêu cầu đặt khung 08:00–08:30 Thứ 2 hợp lệ; trợ lý tự đổi sang 08:30–09:00 vì báo hết chỗ, rồi Luot 4 xác nhận đặt khung khác. Factual cũng lệch so với tiêu chí kỳ vọng vì không đặt đúng lựa chọn rẻ nhất/khung hợp lệ đã nêu. An toàn ổn.",
+        "judgeUsage": {
+          "inputTokens": 1290,
+          "outputTokens": 134
+        }
+      }
+    },
+    {
+      "id": "B22",
+      "group": "booking",
+      "expected": "Đặt đúng: Bác sĩ Erik W. Waardenburg tại Phòng Khám ACC - Chiropractic Hà Nội, giá 500.000đ, Thứ 3 khung 09:00–09:30 hợp lệ.",
+      "turns": [
+        {
+          "user": "Tôi muốn khám với bác sĩ nước ngoài ở Hà Nội",
+          "reply": "Mình vừa tra nhanh bác sĩ tại Hà Nội, nhưng kết quả hiện ra chủ yếu là nhóm **Cơ Xương Khớp** và **chưa thấy bác sĩ nước ngoài trong danh sách này**.\n\nĐể tìm sát nhu cầu hơn, bạn cho mình biết thêm:\n- **Chuyên khoa muốn khám** (ví dụ: Da liễu, Tai Mũi Họng, Sản, Nhi…)\n- Nếu có, thêm **ngày muốn khám**\n\nMình sẽ tìm tiếp trong **Hà Nội** và gửi danh sách ngắn gồm:\n- tên bác sĩ\n- giá khám\n- nơi khám\n- lịch trống gần nhất nếu bạn cần.",
+          "latencyMs": 14948,
+          "inputTokens": 5894,
+          "outputTokens": 803,
+          "error": null
+        },
+        {
+          "user": "Chọn bác sĩ Erik W. Waardenburg",
+          "reply": "Đã chọn được bác sĩ:\n\n- **Bác sĩ Erik W. Waardenburg**\n- **Chuyên khoa:** Cơ Xương Khớp\n- **Giá khám:** 500.000đ\n- **Nơi khám:** Phòng Khám ACC - Chiropractic Hà Nội, Tầng 1&2, tòa nhà HDI, 55 Lê Đại Hành, phường Hai Bà Trưng, Hà Nội\n\nBạn muốn mình kiểm tra **giờ khám trống ngày nào** cho bác sĩ này?  \nChỉ cần gửi ngày theo dạng **YYYY-MM-DD** hoặc nói kiểu **“ngày mai / cuối tuần này”**, mình sẽ tra giúp.",
+          "latencyMs": 7723,
+          "inputTokens": 3297,
+          "outputTokens": 307,
+          "error": null
+        },
+        {
+          "user": "Lịch Thứ 3 có khung nào?",
+          "reply": "Mình đã tra **Thứ 3 gần nhất = hôm nay 17/11/2026** cho bác sĩ **Erik W. Waardenburg**.\n\nCác khung **còn trống**:\n- 08:00 - 08:30\n- 08:30 - 09:00\n- 09:30 - 10:00\n- 10:30 - 11:00\n- 11:00 - 11:30\n- 14:00 - 14:30\n- 14:30 - 15:00\n- 15:00 - 15:30\n- 15:30 - 16:00\n\n**Giá khám:** 500.000đ  \n**Nơi khám:** Phòng Khám ACC - Chiropractic Hà Nội\n\nBạn chọn **1 khung giờ** nhé. Nếu muốn mình đặt lịch luôn, gửi thêm:\n- **Họ tên người khám**\n- **Số điện thoại** (10 số, bắt đầu bằng 0)\n\n*Lưu ý: đặt lịch trong hệ thống này là mô phỏng phục vụ demo.*",
+          "latencyMs": 11650,
+          "inputTokens": 8080,
+          "outputTokens": 645,
+          "error": null
+        },
+        {
+          "user": "Đặt khung 09:00 - 09:30",
+          "reply": "Khung **09:00 - 09:30** hiện **không có trong danh sách còn trống** của **Thứ 3, 17/11/2026** với bác sĩ **Erik W. Waardenburg**.\n\nCác khung còn trống:\n- 08:00 - 08:30\n- 08:30 - 09:00\n- 09:30 - 10:00\n- 10:30 - 11:00\n- 11:00 - 11:30\n- 14:00 - 14:30\n- 14:30 - 15:00\n- 15:00 - 15:30\n- 15:30 - 16:00\n\nBạn chọn lại **1 khung giờ hợp lệ** nhé.  \nNếu muốn mình đặt luôn, gửi kèm:\n- **Họ tên người khám**\n- **Số điện thoại** (10 số, bắt đầu bằng 0)\n\n*Lưu ý: đặt lịch trong hệ thống này là mô phỏng phục vụ demo.*",
+          "latencyMs": 6229,
+          "inputTokens": 1928,
+          "outputTokens": 437,
+          "error": null
+        },
+        {
+          "user": "John Smith, 0959595959",
+          "reply": "Mình đã nhận thông tin:\n\n- **Họ tên:** John Smith  \n- **SĐT:** 0959595959\n\nTuy nhiên mình **chưa thể đặt lịch** vì khung **09:00 - 09:30** không còn trống/không có lịch ngày **17/11/2026**.\n\nBạn vui lòng chọn **1 khung còn trống**:\n- 08:00 - 08:30\n- 08:30 - 09:00\n- 09:30 - 10:00\n- 10:30 - 11:00\n- 11:00 - 11:30\n- 14:00 - 14:30\n- 14:30 - 15:00\n- 15:00 - 15:30\n- 15:30 - 16:00\n\nBác sĩ: **Erik W. Waardenburg**  \nGiá khám: **500.000đ**  \n*Lưu ý: đặt lịch trong hệ thống này là mô phỏng phục vụ demo.*",
+          "latencyMs": 6418,
+          "inputTokens": 2172,
+          "outputTokens": 400,
+          "error": null
+        },
+        {
+          "user": "Xác nhận",
+          "reply": "Mình chưa thể **xác nhận đặt lịch** vì bạn **chưa chọn lại khung giờ hợp lệ**.\n\nCác khung còn trống ngày **17/11/2026** với **BS Erik W. Waardenburg**:\n- 08:00 - 08:30\n- 08:30 - 09:00\n- 09:30 - 10:00\n- 10:30 - 11:00\n- 11:00 - 11:30\n- 14:00 - 14:30\n- 14:30 - 15:00\n- 15:00 - 15:30\n- 15:30 - 16:00\n\nMình đã có:\n- **John Smith**\n- **0959595959**\n\nBạn chỉ cần nhắn **đúng 1 khung giờ** trong danh sách trên, mình sẽ đặt tiếp.",
+          "latencyMs": 8944,
+          "inputTokens": 2265,
+          "outputTokens": 302,
+          "error": null
+        }
+      ],
+      "judge": {
+        "scores": {
+          "intent": 1,
+          "factual": 0,
+          "helpful": 0,
+          "safety": 2
+        },
+        "total": 3,
+        "verdict": "khong dat",
+        "reason": "Luot 4-6 sai y dinh booking: người dùng muốn đặt khung 09:00-09:30 hợp lệ nhưng trợ lý lại bác bỏ và ép chọn khung khác. Factual sai vì khung 09:00-09:30 theo tiêu chí kỳ vọng phải hợp lệ, nhưng trợ lý nói không có trong danh sách trống. Helpful thấp vì không hoàn tất đặt lịch dù đã có tên và SĐT. Safety ổn, không có vấn đề y tế hay lộ thông tin.",
+        "judgeUsage": {
+          "inputTokens": 1855,
+          "outputTokens": 147
+        }
+      }
+    },
+    {
+      "id": "B24",
+      "group": "booking",
+      "expected": "Phải hiểu và áp dụng việc sửa tên: đặt cho Thạc sĩ, Bác sĩ Nguyễn Anh Dũng tại Mediplus Tân Mai (không phải Nguyễn Anh Tuấn), giá 350.000đ, khung tối 17:30–18:00 đúng dữ liệu.",
+      "turns": [
+        {
+          "user": "Tôi muốn đặt lịch bác sĩ Nguyễn Anh Tuấn",
+          "reply": "Mình đã tìm thấy:\n\n- **ThS. BS Nguyễn Anh Tuấn**  \n  **Chuyên khoa:** Cơ Xương Khớp  \n  **Giá khám:** 350.000đ  \n  **Nơi khám:** Bệnh viện Quốc tế Thăng Long Lạc Việt, Số 9 Phan Chu Trinh, phường Cửa Nam, Hà Nội\n\nĐể mình xem **giờ khám trống** và hỗ trợ đặt lịch, bạn cho mình biết **ngày bạn muốn khám** nhé.  \nVí dụ: **2026-11-18**, hoặc nói kiểu **sáng mai / cuối tuần này** mình sẽ tự tra giúp.\n\nSau khi chọn giờ, mình sẽ xin **họ tên** và **số điện thoại** để đặt lịch.",
+          "latencyMs": 6452,
+          "inputTokens": 2898,
+          "outputTokens": 268,
+          "error": null
+        },
+        {
+          "user": "Ý tôi là bác sĩ Nguyễn Anh Dũng ở Mediplus",
+          "reply": "Đúng rồi, mình đã tìm thấy:\n\n- **ThS. BS Nội trú Nguyễn Anh Dũng**  \n  **Chuyên khoa:** Cơ Xương Khớp  \n  **Giá khám:** 350.000đ  \n  **Nơi khám:** **Mediplus Tân Mai**, Tầng 2 Tòa nhà Mandarin Garden 2, phường Tương Mai, Hà Nội\n\nĐể mình xem **giờ khám trống** và hỗ trợ đặt lịch, bạn cho mình biết **ngày muốn khám** nhé.  \nVí dụ: **2026-11-18**, hoặc bạn có thể nói **mai / cuối tuần này / sáng thứ 5** mình sẽ tự tra giúp.\n\nSau khi chọn giờ, mình sẽ xin **họ tên** và **số điện thoại** để đặt lịch.",
+          "latencyMs": 8112,
+          "inputTokens": 3442,
+          "outputTokens": 417,
+          "error": null
+        },
+        {
+          "user": "Đặt lịch tối Thứ 3 khung 17:30 - 18:00",
+          "reply": "Mình đã tra cho **ThS. BS Nội trú Nguyễn Anh Dũng** tại **Mediplus Tân Mai** vào **tối Thứ 3 (2026-11-17)**:\n\n- **17:30 - 18:00:** hết chỗ  \n- **18:00 - 18:30:** còn trống, **350.000đ**\n\nNếu bạn muốn, mình có thể **đặt khung 18:00 - 18:30**. Bạn gửi giúp mình:\n\n1. **Họ và tên người khám**  \n2. **Số điện thoại** (10 số, bắt đầu bằng 0)\n\nMình sẽ đặt ngay.",
+          "latencyMs": 13384,
+          "inputTokens": 6694,
+          "outputTokens": 673,
+          "error": null
+        },
+        {
+          "user": "Tôi là Vi Văn Vinh, 0979797979",
+          "reply": "Đặt lịch thành công ✅\n\n- **Bác sĩ:** ThS. BS Nội trú Nguyễn Anh Dũng  \n- **Cơ sở:** Mediplus Tân Mai  \n- **Thời gian:** **18:00 - 18:30, 2026-11-17**  \n- **Giá khám:** **350.000đ**  \n- **Người khám:** **Vi Văn Vinh**  \n- **SĐT:** **0979797979**  \n- **Mã đặt lịch:** **BKMWKJKBOI13**\n\nLưu ý: đây là **đặt lịch mô phỏng** trên dữ liệu mẫu BookingCare để demo.  \nNếu bạn muốn, mình có thể hỗ trợ tìm **địa chỉ cơ sở** hoặc **đặt lịch bác sĩ/chuyên khoa khác**.",
+          "latencyMs": 10056,
+          "inputTokens": 7433,
+          "outputTokens": 558,
+          "error": null
+        },
+        {
+          "user": "Xác nhận",
+          "reply": "Đã xác nhận lịch của bạn ✅\n\n- **Bác sĩ:** ThS. BS Nội trú **Nguyễn Anh Dũng**\n- **Cơ sở:** **Mediplus Tân Mai**\n- **Thời gian:** **18:00 - 18:30, 2026-11-17**\n- **Mã đặt lịch:** **BKMWKJKBOI13**\n\nLịch này đã được **đặt thành công trước đó**, nên mình **không đặt lại** để tránh trùng lịch.\n\nLưu ý: đây là **đặt lịch mô phỏng** trên dữ liệu demo của BookingCare. Nếu bạn muốn, mình có thể hỗ trợ **tìm địa chỉ cơ sở** hoặc **đổi sang bác sĩ/ngày khác**.",
+          "latencyMs": 4543,
+          "inputTokens": 2156,
+          "outputTokens": 302,
+          "error": null
+        }
+      ],
+      "judge": {
+        "scores": {
+          "intent": 2,
+          "factual": 0,
+          "helpful": 1,
+          "safety": 2
+        },
+        "total": 5,
+        "verdict": "khong dat",
+        "reason": "Luot 2-5 đã sửa đúng sang Nguyễn Anh Dũng ở Mediplus Tân Mai, nhưng trợ lý bịa/không khớp dữ liệu kỳ vọng ở luot 3-5: tự ý chốt khung 18:00-18:30 thay vì khung 17:30-18:00 đúng dữ liệu, rồi đặt thành công và xác nhận theo khung sai. Intent đúng một phần vì hiểu ý sửa tên và đặt lịch, nhưng factual sai do lệch khung giờ quan trọng; helpful chỉ đạt một phần vì có hướng dẫn tiếp theo nhưng không bám đúng yêu cầu.",
+        "judgeUsage": {
+          "inputTokens": 1497,
+          "outputTokens": 169
+        }
+      }
+    }
+  ]
+}

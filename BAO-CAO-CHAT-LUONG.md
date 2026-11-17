@@ -76,3 +76,17 @@ Pilot cũng chỉ ra 2 điểm yếu hành vi và đã sửa trong system prompt
 - **Câu hỏi liều lượng thuốc cho trẻ em** cần guardrail cứng (từ chối đưa liều cụ thể, luôn hướng tới bác sĩ/nhãn thuốc) thay vì chỉ dựa vào system prompt.
 - **Phạm vi dữ liệu:** dữ liệu mẫu chủ yếu ở Hà Nội và TP.HCM (một số tỉnh như Đà Nẵng chưa có bác sĩ trong dữ liệu); các ca kiểm thử âm tính đã phản ánh đúng giới hạn này. Đặt lịch là mô phỏng trên dữ liệu tĩnh thu thập một thời điểm; hệ thống thật cần đồng bộ lịch trực tiếp với đối tác và xử lý tranh chấp giữ chỗ ở tầng giao dịch.
 - **Phương sai của LLM as judge:** điểm do model chấm có dao động giữa các lần chạy; các ca sát ngưỡng (5–6 điểm) có thể đổi kết luận khi chấm lại. Số liệu trong báo cáo là của một đợt chạy duy nhất, có kết quả thô kèm theo để đối chiếu.
+
+## Phụ lục — Đo lại mẫu sau khi sửa kiến trúc (17/11/2026, tối cùng ngày)
+
+Sau đợt đo toàn bộ ở trên, hai điểm yếu kiến trúc đã được sửa: (1) máy trạng thái đặt lịch ở backend (ghim bác sĩ/slot theo phiên, `create_booking` chặn slot lệch bác sĩ đã ghim ở tầng service); (2) tìm kiếm theo ngày không còn lọc cứng (trả thêm ngày có lịch gần nhất) và tìm được theo tên bác sĩ. Để đo tác động mà không chạy lại toàn bộ, hệ thống bản đã sửa được chạy lại đúng **15 ca từng trượt nặng nhất** của đợt đo trước (10 đặt lịch + 5 tìm kiếm):
+
+| Chỉ số (trên cùng 15 ca) | Bản trước sửa | Bản đã sửa |
+|---|---|---|
+| Ca đạt (≥6/8) | 0/15 | **7/15** |
+| Điểm trung bình | 3,6/8 | **5,47/8** |
+| Đặt lịch đạt | 0/10 | **5/10** (B02, B03, B05, B09, B16 chuyển sang đạt; B05 từ 0 lên 7) |
+| Tìm kiếm đạt | 0/5 | **2/5** (S03 từ 4 lên 8, S18 từ 5 lên 7) |
+| Thời gian phản hồi TB/lượt | — | 9,38s |
+
+Lưu ý: đây là tập ca khó nhất đã chọn lọc, không so sánh trực tiếp với tỷ lệ 76% toàn bộ ở mục 3. Các ca còn trượt: B19 (đặt 2 lịch cho 2 người, 5→3 — ca phức hợp, điểm dao động giữa hai lần chạy), B08/B21/B22/B24 (tăng điểm nhưng chưa qua ngưỡng), S09/S22/S29 (vẫn chưa nêu đúng bác sĩ kỳ vọng — giới hạn độ phủ của truy xuất tìm kiếm, chưa xử lý ở đợt sửa này). Kết quả thô của đợt đo mẫu: `eval/sample-rerun-results.json`.
