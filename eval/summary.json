@@ -1,0 +1,132 @@
+{
+  "runAt": "2026-11-17T09:35:52.178Z",
+  "passThreshold": 6,
+  "overall": {
+    "cases": 110,
+    "judgedCases": 110,
+    "errorCases": 0,
+    "avgScores": {
+      "intent": 1.73,
+      "factual": 1.45,
+      "helpful": 1.58,
+      "safety": 1.95,
+      "total": 6.71
+    },
+    "passRate": 0.76,
+    "turns": 201,
+    "avgLatencyMs": 9827.12,
+    "p95LatencyMs": 16981,
+    "avgInputTokensPerTurn": 4440.08,
+    "avgOutputTokensPerTurn": 434.17
+  },
+  "groups": {
+    "search": {
+      "cases": 30,
+      "judgedCases": 30,
+      "errorCases": 0,
+      "avgScores": {
+        "intent": 1.63,
+        "factual": 1.27,
+        "helpful": 1.4,
+        "safety": 2,
+        "total": 6.3
+      },
+      "passRate": 0.73,
+      "turns": 30,
+      "avgLatencyMs": 10928,
+      "p95LatencyMs": 21029,
+      "avgInputTokensPerTurn": 4946.97,
+      "avgOutputTokensPerTurn": 409.27
+    },
+    "qa": {
+      "cases": 25,
+      "judgedCases": 25,
+      "errorCases": 0,
+      "avgScores": {
+        "intent": 2,
+        "factual": 1.92,
+        "helpful": 2,
+        "safety": 2,
+        "total": 7.92
+      },
+      "passRate": 1,
+      "turns": 25,
+      "avgLatencyMs": 10919.52,
+      "p95LatencyMs": 13930,
+      "avgInputTokensPerTurn": 3476.16,
+      "avgOutputTokensPerTurn": 454.6
+    },
+    "booking": {
+      "cases": 25,
+      "judgedCases": 25,
+      "errorCases": 0,
+      "avgScores": {
+        "intent": 1.32,
+        "factual": 0.6,
+        "helpful": 1.04,
+        "safety": 1.88,
+        "total": 4.84
+      },
+      "passRate": 0.36,
+      "turns": 116,
+      "avgLatencyMs": 10277.28,
+      "p95LatencyMs": 17250,
+      "avgInputTokensPerTurn": 5298.53,
+      "avgOutputTokensPerTurn": 480.96
+    },
+    "clarify": {
+      "cases": 10,
+      "judgedCases": 10,
+      "errorCases": 0,
+      "avgScores": {
+        "intent": 1.9,
+        "factual": 1.9,
+        "helpful": 1.9,
+        "safety": 2,
+        "total": 7.7
+      },
+      "passRate": 1,
+      "turns": 10,
+      "avgLatencyMs": 4792.8,
+      "p95LatencyMs": 5839,
+      "avgInputTokensPerTurn": 1121.4,
+      "avgOutputTokensPerTurn": 220
+    },
+    "safety": {
+      "cases": 10,
+      "judgedCases": 10,
+      "errorCases": 0,
+      "avgScores": {
+        "intent": 2,
+        "factual": 2,
+        "helpful": 1.9,
+        "safety": 1.8,
+        "total": 7.7
+      },
+      "passRate": 0.9,
+      "turns": 10,
+      "avgLatencyMs": 8204.6,
+      "p95LatencyMs": 13678,
+      "avgInputTokensPerTurn": 1389.8,
+      "avgOutputTokensPerTurn": 334.8
+    },
+    "oos": {
+      "cases": 10,
+      "judgedCases": 10,
+      "errorCases": 0,
+      "avgScores": {
+        "intent": 1.9,
+        "factual": 1.9,
+        "helpful": 1.8,
+        "safety": 2,
+        "total": 7.6
+      },
+      "passRate": 0.9,
+      "turns": 10,
+      "avgLatencyMs": 5228.5,
+      "p95LatencyMs": 9586,
+      "avgInputTokensPerTurn": 1740.2,
+      "avgOutputTokensPerTurn": 228.7
+    }
+  }
+}
