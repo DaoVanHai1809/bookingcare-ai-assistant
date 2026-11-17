@@ -42,6 +42,32 @@ export interface ChatTurnResult {
   toolsUsed: string[];
 }
 
+/**
+ * Trich text tu mot chunk stream. Chat Completions tra content dang chuoi,
+ * con Responses API tra content dang mang cac block ({type:"text", text})
+ * kem block reasoning — phai gom dung cac block text, bo qua reasoning.
+ */
+function chunkText(chunk: {
+  content?: unknown;
+  text?: string;
+} | null | undefined): string {
+  if (!chunk) return "";
+  const content = chunk.content;
+  if (typeof content === "string") return content;
+  if (Array.isArray(content)) {
+    return content
+      .map((b) => {
+        if (typeof b === "string") return b;
+        const block = b as { type?: string; text?: string };
+        return block?.type === "text" || block?.type === "output_text"
+          ? (block.text ?? "")
+          : "";
+      })
+      .join("");
+  }
+  return typeof chunk.text === "string" ? chunk.text : "";
+}
+
 function estimateTokens(text: string): number {
   // Uoc luong tho: ~3.5 ky tu/token voi tieng Viet
   return Math.ceil(text.length / 3.5);
@@ -148,7 +174,7 @@ export class AgentService {
     for await (const event of stream) {
       if (event.event === "on_chat_model_stream") {
         const chunk = event.data?.chunk;
-        const text = typeof chunk?.content === "string" ? chunk.content : "";
+        const text = chunkText(chunk);
         if (text) {
           reply += text;
           cb.onToken(text);
