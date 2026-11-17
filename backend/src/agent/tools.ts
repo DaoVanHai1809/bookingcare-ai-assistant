@@ -36,16 +36,17 @@ function pack(summary: string, cards: Card[]): string {
 
 export function createTools(deps: ToolDeps) {
   const searchDoctorsTool = tool(
-    async ({ specialty, province, date, limit }) => {
-      const { doctors, cards } = await deps.catalog.searchDoctors({
+    async ({ specialty, province, name, date, limit }) => {
+      const { doctors, cards, dateAvailability } = await deps.catalog.searchDoctors({
         specialty,
         province,
+        name,
         date,
         limit: limit ?? 5,
       });
       if (!doctors.length) {
         return pack(
-          "Không tìm thấy bác sĩ phù hợp với tiêu chí. Hãy gợi ý người dùng đổi chuyên khoa, tỉnh/thành hoặc ngày khám.",
+          "Không tìm thấy bác sĩ phù hợp với tiêu chí. Hãy gợi ý người dùng đổi chuyên khoa hoặc tỉnh/thành.",
           [],
         );
       }
@@ -55,22 +56,49 @@ export function createTools(deps: ToolDeps) {
           .map((s) => s.facility_name)
           .filter((v, idx, a) => a.indexOf(v) === idx)
           .join("; ");
-        return `- doctorId=${d.id} | ${d.name} | Chuyên khoa: ${d.specialties
+        let line = `- doctorId=${d.id} | ${d.name} | Chuyên khoa: ${d.specialties
           .map((s) => s.name)
           .join(", ")} | ${d.province ?? ""} | Giá: ${price.priceLabel} | Nơi khám: ${facs}`;
+        // Khi nguoi dung hoi theo ngay: noi ro bac si co lich ngay do hay
+        // khong, kem ngay co lich gan nhat — agent khong duoc "khong tim
+        // thay" hay hoi lai khi bac si chi la khong kham ngay do.
+        if (date && dateAvailability) {
+          const info = dateAvailability[String(d.id)];
+          if (info) {
+            line +=
+              info.availableOnDate > 0
+                ? ` | Ngày ${date}: còn ${info.availableOnDate} khung trống`
+                : ` | Ngày ${date}: KHÔNG có lịch | Ngày có lịch gần nhất: ${
+                    info.nearestDates.join(", ") || "không có trong dữ liệu lịch hiện có"
+                  }`;
+          }
+        }
+        return line;
       });
+      let footer = `\nDùng check_slots với doctorId và ngày (YYYY-MM-DD) để xem giờ trống.`;
+      if (
+        date &&
+        dateAvailability &&
+        doctors.every((d) => (dateAvailability[String(d.id)]?.availableOnDate ?? 0) === 0)
+      ) {
+        footer = `\nKhông bác sĩ nào ở trên có lịch ngày ${date}. Hãy nói rõ điều này với người dùng, gợi ý các ngày có lịch gần nhất đã ghi ở trên và hỏi họ có muốn xem lịch ngày đó không — KHÔNG hỏi lại chuyên khoa/tỉnh thành đã biết.`;
+      }
       return pack(
-        `Tìm thấy ${doctors.length} bác sĩ:\n${lines.join("\n")}\nDùng check_slots với doctorId và ngày (YYYY-MM-DD) để xem giờ trống.`,
+        `Tìm thấy ${doctors.length} bác sĩ:\n${lines.join("\n")}${footer}`,
         cards,
       );
     },
     {
       name: "search_doctors",
       description:
-        "Tìm bác sĩ theo chuyên khoa (tiếng Việt, ví dụ 'Cơ Xương Khớp'), tỉnh/thành (ví dụ 'Hà Nội') và/hoặc ngày khám (YYYY-MM-DD). Trả về danh sách bác sĩ kèm doctorId, giá khám, nơi khám.",
+        "Tìm bác sĩ theo tên cụ thể (khi người dùng nêu tên bác sĩ), chuyên khoa (tiếng Việt, ví dụ 'Cơ Xương Khớp'), tỉnh/thành (ví dụ 'Hà Nội') và/hoặc ngày khám (YYYY-MM-DD). Trả về danh sách bác sĩ kèm doctorId, giá khám, nơi khám; khi có ngày, mỗi bác sĩ kèm trạng thái có lịch ngày đó và các ngày có lịch gần nhất.",
       schema: z.object({
         specialty: z.string().optional().describe("Tên chuyên khoa, ví dụ: Cơ Xương Khớp"),
         province: z.string().optional().describe("Tỉnh/thành, ví dụ: Hà Nội"),
+        name: z
+          .string()
+          .optional()
+          .describe("Tên bác sĩ cụ thể khi người dùng nêu tên, ví dụ: Vũ Văn Hòe"),
         date: z
           .string()
           .optional()

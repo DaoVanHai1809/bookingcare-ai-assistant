@@ -41,6 +41,8 @@ function doctorPriceRange(d: Doctor): { min: number | null; max: number | null }
 export interface SearchDoctorsParams {
   specialty?: string;
   province?: string;
+  /** Tim theo ten bac si cu the (khong dau cung duoc) */
+  name?: string;
   date?: string; // YYYY-MM-DD
   limit?: number;
 }
@@ -88,13 +90,21 @@ export class CatalogService {
   async searchDoctors(params: SearchDoctorsParams): Promise<{
     doctors: Doctor[];
     cards: Card[];
+    /** Chi co khi params.date duoc truyen: so slot con trong dung ngay do
+     * va cac ngay co lich gan nhat cua tung bac si. */
+    dateAvailability?: Record<
+      string,
+      { availableOnDate: number; nearestDates: string[] }
+    >;
   }> {
     const limit = Math.min(params.limit ?? 5, 10);
     const specQ = params.specialty ? normalizeText(params.specialty) : "";
     const provQ = params.province ? normalizeText(params.province) : "";
+    const nameQ = params.name ? normalizeText(params.name) : "";
 
     let doctors: Doctor[] = (await this.doctorRepo.find()).map(toDoctor);
     doctors = doctors.filter((d) => {
+      if (nameQ && !normalizeText(d.name).includes(nameQ)) return false;
       if (specQ) {
         const matchSpec = d.specialties.some((s) =>
           normalizeText(s.name).includes(specQ),
@@ -107,13 +117,41 @@ export class CatalogService {
       return true;
     });
 
-    if (params.date) {
+    // Khi co ngay: KHONG loc cung theo ngay (bac si khong kham ngay do se
+    // "bien mat" khoi ket qua va agent khong biet de tra loi). Thay vao do:
+    // xep bac si co lich ngay do len truoc, va tinh cho moi bac si cac ngay
+    // co lich gan nhat de agent thong bao lai cho nguoi dung.
+    let nearestByDoctor: Map<string, string[]> | null = null;
+    if (params.date && doctors.length) {
+      const reqTime = Date.parse(params.date);
       const rows = await this.slotRepo.find({
-        where: { date: params.date },
-        select: { doctorId: true },
+        where: { doctorId: In(doctors.map((d) => String(d.id))) },
+        select: { doctorId: true, date: true },
       });
-      const idsWithSlots = new Set(rows.map((r) => r.doctorId));
-      doctors = doctors.filter((d) => idsWithSlots.has(String(d.id)));
+      const datesByDoctor = new Map<string, Set<string>>();
+      for (const r of rows) {
+        let set = datesByDoctor.get(r.doctorId);
+        if (!set) datesByDoctor.set(r.doctorId, (set = new Set()));
+        set.add(r.date);
+      }
+      nearestByDoctor = new Map();
+      for (const d of doctors) {
+        const dates = [...(datesByDoctor.get(String(d.id)) ?? [])].sort();
+        const nearest = dates
+          .slice()
+          .sort(
+            (a, b) =>
+              Math.abs(Date.parse(a) - reqTime) - Math.abs(Date.parse(b) - reqTime),
+          )
+          .slice(0, 3)
+          .sort();
+        nearestByDoctor.set(String(d.id), nearest);
+      }
+      const hasOnDate = (d: Doctor) =>
+        (datesByDoctor.get(String(d.id))?.has(params.date!) ?? false) ? 0 : 1;
+      doctors = doctors
+        .slice()
+        .sort((a, b) => hasOnDate(a) - hasOnDate(b));
     }
     doctors = doctors.slice(0, limit);
 
@@ -173,7 +211,20 @@ export class CatalogService {
       } as Card;
     });
 
-    return { doctors, cards };
+    let dateAvailability:
+      | Record<string, { availableOnDate: number; nearestDates: string[] }>
+      | undefined;
+    if (params.date && nearestByDoctor) {
+      dateAvailability = {};
+      for (const d of doctors) {
+        dateAvailability[String(d.id)] = {
+          availableOnDate: availableCount?.get(String(d.id)) ?? 0,
+          nearestDates: nearestByDoctor.get(String(d.id)) ?? [],
+        };
+      }
+    }
+
+    return { doctors, cards, ...(dateAvailability ? { dateAvailability } : {}) };
   }
 
   async searchFacilities(params: SearchFacilitiesParams): Promise<{
