@@ -18,6 +18,16 @@ import {
  */
 const ANTHROPIC_THINKING_BUDGET = 1024;
 
+/**
+ * Responses API tinh token suy luan (reasoning) chung vao mot "bo" token
+ * dau ra (max_output_tokens). Neu de tran 500 nhu model thuong, co luot
+ * model suy luan dai se an het tran truoc khi kip goi tool hay viet cau tra
+ * loi -> phan hoi rong. Cong them khoang dem cho reasoning (tuong tu cach
+ * lam phia Anthropic); tran cho phan tra loi hien thi van la
+ * MAX_OUTPUT_TOKENS va output trung binh do duoc van duoi 500 token/luot.
+ */
+const OPENAI_REASONING_HEADROOM = 1024;
+
 /** Cac dong Claude ho tro extended thinking (3.7 va the he 4 tro di). */
 function anthropicSupportsThinking(model: string): boolean {
   return /claude-3-7|claude-(sonnet|opus|haiku)-4/i.test(model);
@@ -59,7 +69,9 @@ export class LlmService {
     return new ChatOpenAI({
       model: LLM_MODEL,
       apiKey: llmApiKey(),
-      maxTokens: MAX_OUTPUT_TOKENS,
+      maxTokens: isReasoning
+        ? MAX_OUTPUT_TOKENS + OPENAI_REASONING_HEADROOM
+        : MAX_OUTPUT_TOKENS,
       ...(isReasoning
         ? {
             // gpt-5/o-series tren Chat Completions khong cho dung function
