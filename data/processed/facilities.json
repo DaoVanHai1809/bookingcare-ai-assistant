@@ -1,0 +1,122 @@
+[
+  {
+    "id": 2,
+    "name": "Hệ Thống phòng khám Vietlife ",
+    "url": "he-thong-phong-kham-vietlife-",
+    "page_url": "https://bookingcare.vn/co-so-y-te/he-thong-phong-kham-vietlife--p2",
+    "address": "Cơ sở 1: 14 Trần Bình Trọng - Hoàn Kiếm - Hà Nội\nCơ sở 2: 266 Đường Lê Thanh Nghị, Phường Đồng Tâm - Hai Bà Trưng -  Hà Nội\nCơ sở Nguyễn Chí Thanh: 189A - 189B Nguyễn Chí Thanh, Quận 5, TP. HCM\nCơ sở Số 583 Sư Vạn Hạnh, Phường 13, Quận 10, Tp Hồ Chí Minh",
+    "province": "Hà Nội",
+    "latitude": "21.020277304212488",
+    "longitude": "105.84446981549263",
+    "image": "https://cdn.bookingcare.vn/fo/2025/05/05/144042-vietlife.png",
+    "description": "Từ nay, người bệnh có thể đặt khám tại Hệ thống phòng khám Vietlife thông qua hệ thống đặt khám BookingCare"
+  },
+  {
+    "id": 3,
+    "name": "Bệnh viện Đa khoa Đông Đô",
+    "url": "benh-vien-da-khoa-dong-do",
+    "page_url": "https://bookingcare.vn/co-so-y-te/benh-vien-da-khoa-dong-do-p3",
+    "address": "Số 5 Xã Đàn, phường Kim Liên, Hà Nội",
+    "province": "Hà Nội",
+    "latitude": "21.009193604525986",
+    "longitude": "105.83818913811261",
+    "image": "https://cdn.bookingcare.vn/fo/2025/05/22/102823-dong-do.png",
+    "description": "Hãy đặt khám với Bệnh viện Đa khoa Đông Đô trên Nền tảng Y tế Chăm sóc sức khỏe toàn diện BookingCare: Được lựa chọn khám với các bác sĩ chuyên khoa giàu kinh nghiệm, dịch vụ y tế chất lượng Đặt hẹn trực tuyến & nhận hướng dẫn chi tiết trước khi đi khám (miễn phí) Giảm thiểu thời gian chờ đợi"
+  },
+  {
+    "id": 4,
+    "name": "Bệnh viện Đa khoa An Việt",
+    "url": "benh-vien-da-khoa-an-viet",
+    "page_url": "https://bookingcare.vn/co-so-y-te/benh-vien-da-khoa-an-viet-p4",
+    "address": "Số 1E Trường Chinh, phường Tương Mai, Hà Nội\r\n\r\n",
+    "province": "Hà Nội",
+    "latitude": "20.99720926570612",
+    "longitude": "105.84239856337307",
+    "image": "https://cdn.bookingcare.vn/fo/2024/11/28/164548-an-viet-2.png",
+    "description": "Từ nay, người bệnh có thể đặt lịch tại Bệnh viện Đa khoa An Việt thông qua hệ thống đặt khám BookingCare"
+  },
+  {
+    "id": 6,
+    "name": "Bệnh viện Đa khoa Hồng Phát",
+    "url": "benh-vien-da-khoa-hong-phat",
+    "page_url": "https://bookingcare.vn/co-so-y-te/benh-vien-da-khoa-hong-phat-p6",
+    "address": "Số 219 Lê Duẩn, phường Hai Bà Trưng, Hà Nội\r\n",
+    "province": "Hà Nội",
+    "latitude": "21.01837482545329",
+    "longitude": "105.84159865894478",
+    "image": "https://cdn.bookingcare.vn/fo/2024/11/27/165809-mat-1.png",
+    "description": "Từ nay, người bệnh có thể đặt khám tại Bệnh viện Đa khoa Hồng Phát thông qua hệ thống đặt khám BookingCare"
+  },
+  {
+    "id": 7,
+    "name": "Bệnh viện Đa khoa Bảo Sơn 2",
+    "url": "benh-vien-da-khoa-bao-son-2",
+    "page_url": "https://bookingcare.vn/co-so-y-te/benh-vien-da-khoa-bao-son-2-p7",
+    "address": "Số 52 Nguyễn Chí Thanh, phường Láng, Hà Nội",
+    "province": "Hà Nội",
+    "latitude": "21.02422561442756",
+    "longitude": "105.81029042601585",
+    "image": "https://cdn.bookingcare.vn/fo/2025/04/24/105734-bao-son.png",
+    "description": "Từ nay, người bệnh có thể đặt khám tại Bệnh viện Bảo Sơn 2 thông qua hệ thống đặt khám BookingCare"
+  },
+  {
+    "id": 27,
+    "name": "Phòng khám Đa khoa Meditec",
+    "url": "phong-kham-da-khoa-meditec",
+    "page_url": "https://bookingcare.vn/co-so-y-te/phong-kham-da-khoa-meditec-p27",
+    "address": "Số 52 Bà Triệu, Phường Cửa Nam, Hà Nội",
+    "province": "Hà Nội",
+    "latitude": "21.022905845222713",
+    "longitude": "105.85046773874446",
+    "image": "https://cdn.bookingcare.vn/fo/2025/05/05/142642-meditec.png",
+    "description": "Hãy đặt khám với Phòng khám Đa khoa Meditec trên Nền tảng Y tế Chăm sóc sức khỏe toàn diện BookingCare"
+  },
+  {
+    "id": 28,
+    "name": "Phòng Khám ACC - Chiropractic Hà Nội",
+    "url": "phong-kham-acc--chiropractic-ha-noi",
+    "page_url": "https://bookingcare.vn/co-so-y-te/phong-kham-acc--chiropractic-ha-noi-p28",
+    "address": "Tầng 1&2, toà nhà HDI, 55 Lê Đại Hành, phường Hai Bà Trưng, Hà Nội",
+    "province": "Hà Nội",
+    "latitude": "21.01236116910624",
+    "longitude": "105.84700981698361",
+    "image": "https://cdn.bookingcare.vn/fo/2025/05/13/093347-acc.png",
+    "description": "Phòng Khám ACC - Chiropractic Hà Nội là một trong chuỗi Phòng khám ACC Việt Nam - chuyên sâu về điều trị các bệnh lý thần kinh cột sống"
+  },
+  {
+    "id": 29,
+    "name": "Phòng khám Chuyên khoa Da Liễu ",
+    "url": "phong-kham-chuyen-khoa-da-lieu-",
+    "page_url": "https://bookingcare.vn/co-so-y-te/phong-kham-chuyen-khoa-da-lieu--p29",
+    "address": "Số 207 Phố Huế, phường Hai Bà Trưng, Hà Nội",
+    "province": "Hà Nội",
+    "latitude": "21.012771289226606",
+    "longitude": "105.85181900260605",
+    "image": "https://cdn.bookingcare.vn/fo/2024/10/23/172425-landing-page-5.png",
+    "description": "Từ nay, người bệnh có thể đặt lịch tại Phòng khám Chuyên khoa Da Liễu thông qua hệ thống đặt khám BookingCare. Được lựa chọn khám với bác sĩ chuyên khoa giàu kinh nghiệm Hỗ trợ đặt khám trực tuyến trước khi đi khám (miễn phí đặt lịch) Giảm thiểu thời gian chờ đợi"
+  },
+  {
+    "id": 41,
+    "name": "Bệnh viện Mắt Hà Nội 2",
+    "url": "benh-vien-mat-ha-noi-2",
+    "page_url": "https://bookingcare.vn/co-so-y-te/benh-vien-mat-ha-noi-2-p41",
+    "address": "72 Nguyễn Chí Thanh, phường Láng, Hà Nội",
+    "province": "Hà Nội",
+    "latitude": "21.01803472266944",
+    "longitude": "105.8067837419292",
+    "image": "https://cdn.bookingcare.vn/fo/2025/05/07/151315-mat-hn2.png",
+    "description": ""
+  },
+  {
+    "id": 44,
+    "name": "Bệnh viện Đa khoa Quốc tế Thu Cúc cơ sở Thụy Khuê",
+    "url": "benh-vien-da-khoa-quoc-te-thu-cuc-co-so-thuy-khue",
+    "page_url": "https://bookingcare.vn/co-so-y-te/benh-vien-da-khoa-quoc-te-thu-cuc-co-so-thuy-khue-p44",
+    "address": "286, 288, 290, 292, 294 Thụy Khuê, Phường Tây Hồ, Hà Nội.",
+    "province": "Hà Nội",
+    "latitude": "21.045179599159997",
+    "longitude": "105.81445735300763",
+    "image": "https://cdn.bookingcare.vn/fo/2025/04/24/104811-thu-cuc.png",
+    "description": "Từ nay, người bệnh có thể đặt lịch tại Hệ thống Y tế Thu Cúc thông qua hệ thống đặt khám BookingCare"
+  }
+]
