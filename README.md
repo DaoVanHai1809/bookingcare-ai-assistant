@@ -110,3 +110,9 @@ Xem `eval/README.md`.
 | `PORT` | Cổng backend, mặc định `3001` |
 | `DB_TYPE` | `sqlite` (mặc định, file `backend/bookingcare.db`) hoặc `mysql` |
 | `DB_HOST` / `DB_PORT` / `DB_USERNAME` / `DB_PASSWORD` / `DB_DATABASE` | Cấu hình MySQL khi `DB_TYPE=mysql` |
+
+## Triển khai (deploy)
+
+- **Backend (Render):** repo có sẵn `render.yaml` — trên Render chọn "New > Blueprint", trỏ vào repo này; đặt biến môi trường `OPENAI_API_KEY` (hoặc `ANTHROPIC_API_KEY` nếu dùng Claude) trong dashboard. Build tự chạy seed dữ liệu vào SQLite.
+- **Frontend (Vercel):** import repo, đặt Root Directory là `frontend`, thêm biến môi trường `VITE_API_URL` = `<URL backend>/api/chat`, rồi Deploy.
+- Chạy local: backend `npm install && npm run db:seed && npm run dev` (cổng 3001), frontend `npm install && npm run dev` (cổng 5173).

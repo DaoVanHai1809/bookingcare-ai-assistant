@@ -1,0 +1,14 @@
+services:
+  - type: web
+    name: bookingcare-ai-backend
+    env: node
+    rootDir: backend
+    buildCommand: npm install --include=dev && npm run build && npm run db:seed
+    startCommand: npm start
+    envVars:
+      - key: LLM_PROVIDER
+        value: openai
+      - key: LLM_MODEL
+        value: gpt-5.4
+      - key: OPENAI_API_KEY
+        sync: false
