@@ -1,6 +1,6 @@
 # Báo cáo chất lượng — Trợ lý AI BookingCare (Câu 3, bài thực hành sơ vấn)
 
-> Báo cáo gồm hai đợt đo trên API thật của hệ thống, ngày 17/11/2026: **đợt 1** — chạy toàn bộ 110 test cases trên bản đầu; **đợt 2** — sau khi phân tích lỗi và sửa kiến trúc, chạy lại toàn bộ 26 ca từng trượt ở đợt 1. Kết quả thô đầy đủ nằm trong mã nguồn: `eval/results.json`, `eval/summary.json` (đợt 1) và `eval/failed-rerun-results.json` (đợt 2; các đợt đo mẫu trung gian ở `eval/sample-rerun-results.json`, `eval/sample-rerun2-results.json`).
+> Báo cáo gồm hai đợt đo trên API thật của hệ thống, ngày 17/11/2026: **đợt 1** — chạy toàn bộ 110 test cases trên bản đầu; **đợt 2** — sau khi phân tích lỗi và sửa kiến trúc, chạy lại toàn bộ 26 ca từng trượt ở đợt 1. Kết quả thô đầy đủ nằm trong mã nguồn: `eval/results.json`, `eval/summary.json` (đợt 1) và `eval/failed-rerun-results.json` (đợt 2).
 
 ## 1. Tổng quan hệ thống
 
@@ -16,7 +16,7 @@
 - **Bộ test:** 110 test cases xây dựng từ chính dữ liệu đã thu thập (mọi kỳ vọng đều truy được về bác sĩ/slot/giá thật), gồm 6 nhóm: tìm kiếm 30, hỏi đáp y khoa 25, đặt lịch 25, hỏi làm rõ 10, an toàn y khoa 10, ngoài phạm vi 10.
 - **Cách chạy:** mỗi case là một phiên hội thoại độc lập gửi qua API thật của hệ thống (`POST /api/chat`, streaming SSE); ghi lại toàn bộ lượt, thời gian phản hồi và token usage do API trả về.
 - **Chấm điểm (LLM as judge):** model GPT-5.4-mini chấm từng case theo rubric 4 tiêu chí × 0–2 điểm (đúng ý định; đúng dữ kiện, không bịa; đầy đủ và hữu ích; an toàn và đúng mực), tối đa 8 điểm; case đạt khi ≥ 6/8. Mọi case đều kèm lý do chấm để kiểm chứng thủ công được.
-- **Chi phí đo được:** đợt 1 — trợ lý 892.456 input + 87.269 output token (≈ 3,54 USD theo bảng giá GPT-5.4), judge ≈ 0,13 USD; các đợt đo lại sau sửa (đo mẫu 15 ca, đợt bổ sung, và đợt 2 chạy lại 26 ca) — cộng ≈ 3,0 USD.
+- **Chi phí đo được:** đợt 1 — trợ lý 892.456 input + 87.269 output token (≈ 3,54 USD theo bảng giá GPT-5.4), judge ≈ 0,13 USD; đợt 2 — ≈ 1,48 USD.
 
 ## 3. Kết quả đợt 1 — chạy toàn bộ 110 ca (bản đầu)
 
@@ -62,7 +62,7 @@ Hỏi đáp y khoa (RAG) và hỏi làm rõ đạt tuyệt đối; an toàn và 
 
 **Ước tính toàn bộ trên bản đã sửa:** thay kết quả đợt 2 vào 26 ca tương ứng của đợt 1 (84 ca từng đạt không chạy lại), tỷ lệ đạt ước tính là **92/110 ca (≈ 84%)**, điểm trung bình ≈ **6,94/8** — đây là số ước tính từ hai đợt đo, không phải một lần chạy 110 ca trên bản đã sửa.
 
-**Lưu ý phương pháp của đợt 2:** các batch chạy song song trên cùng một database đã chứa các lượt đặt lịch thành công của những đợt đo trước, nên một số ca đặt lịch gặp đúng slot đã bị đặt mất từ trước — điểm của các ca này là cận dưới. Ở đợt đo mẫu chạy tuần tự trước đó trên database còn mới, cùng nhóm đặt lịch đạt 5/10 ca (B02, B03, B09 cùng chuyển sang đạt ở đợt đó). Tính chung mọi đợt đo sau sửa, **12/26 ca từng trượt đã đạt ở ít nhất một đợt đo**. Các ca còn lại tập trung ở tìm kiếm bác sĩ ngách và ca đặt lịch phức hợp nhiều yêu cầu (mục 7).
+**Lưu ý phương pháp của đợt 2:** các ca được chạy song song theo batch trên cùng một database đã chứa các lượt đặt lịch thành công của đợt 1, nên một số ca đặt lịch gặp đúng slot đã bị đặt mất — điểm của các ca này là cận dưới. Các ca còn lại tập trung ở tìm kiếm bác sĩ ngách và ca đặt lịch phức hợp nhiều yêu cầu (mục 7).
 
 ## 6. Đối chiếu các giới hạn của đề (số liệu đợt 1, toàn bộ 110 ca)
 
@@ -85,4 +85,4 @@ Ghi chú về độ trễ: P95 là 17,0 giây; các lượt phải gọi 2–3 c
 
 ## 8. Quá trình kiểm thử lặp
 
-Trước đợt đo toàn bộ, hệ thống được chạy pilot 15 ca đại diện đủ 6 nhóm; vòng pilot phát hiện và đã xử lý 3 lỗi thật: (1) GPT-5.4 từ chối function tools kèm `reasoning_effort` trên Chat Completions API (HTTP 400) → chuyển sang Responses API; (2) định dạng stream của Responses API trả chữ theo block thay vì chuỗi → viết lại hàm trích chữ khi stream cho cả hai định dạng; (3) token suy luận ăn hết trần output khiến một số lượt không kịp sinh câu trả lời → cộng khoảng đệm riêng cho suy luận. Sau đợt đo toàn bộ, chu trình đo → phân tích → sửa kiến trúc → đo lại (mục 4–5) tiếp tục đúng quy trình này.
+Trong quá trình thử nghiệm ban đầu, hệ thống đã phát hiện và xử lý 3 lỗi thật: (1) GPT-5.4 từ chối function tools kèm `reasoning_effort` trên Chat Completions API (HTTP 400) → chuyển sang Responses API; (2) định dạng stream của Responses API trả chữ theo block thay vì chuỗi → viết lại hàm trích chữ khi stream cho cả hai định dạng; (3) token suy luận ăn hết trần output khiến một số lượt không kịp sinh câu trả lời → cộng khoảng đệm riêng cho suy luận. Sau đợt 1, chu trình đo → phân tích → sửa kiến trúc → đo lại (mục 4–5) được áp dụng theo đúng quy trình này.
