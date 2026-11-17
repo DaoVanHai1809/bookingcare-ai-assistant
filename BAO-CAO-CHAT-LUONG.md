@@ -60,6 +60,8 @@ Hỏi đáp y khoa (RAG) và hỏi làm rõ đạt tuyệt đối; an toàn và 
 
 Cải thiện rõ nhất ở đúng các ca từng lệch dữ kiện: B05 từ 0 lên 7, B09 từ 4 lên 8, B16 từ 4 lên 7, B02 và B03 cùng lên 6 (đạt); phía tìm kiếm, S03 từ 4 lên 8 và S18 từ 5 lên 7. Lưu ý đây là tập ca khó đã chọn lọc để đo tác động của bản sửa, không phải tỷ lệ toàn bộ mới; các ca còn trượt được liệt kê ở mục 7.
 
+Đợt chạy bổ sung 11 ca trượt còn lại đo thêm được 5 ca trước khi tài khoản API hết credit giữa chừng (S21: 4→5; S15: 5→5; B01: 5→5; B04: 5→4; S07: 2→2, lượt vẫn bị rỗng do treo request phía nhà cung cấp); 6 ca (B12, B18, B20, B25, SF05, X08) chưa có số sau sửa. Tổng cộng 20/26 ca từng trượt đã được đo lại trên bản đã sửa, trong đó 7 ca chuyển sang đạt. Kết quả thô đợt bổ sung: `eval/sample-rerun2-results.json`.
+
 ## 6. Đối chiếu các giới hạn của đề (số liệu đợt 1, toàn bộ 110 ca)
 
 | Chỉ số | Giới hạn đề | Đo được | Kết luận |
