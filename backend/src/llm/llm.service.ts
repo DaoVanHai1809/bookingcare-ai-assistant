@@ -61,7 +61,13 @@ export class LlmService {
       apiKey: llmApiKey(),
       maxTokens: MAX_OUTPUT_TOKENS,
       ...(isReasoning
-        ? { modelKwargs: { reasoning_effort: "medium" } }
+        ? {
+            // gpt-5/o-series tren Chat Completions khong cho dung function
+            // tools kem reasoning_effort (API tra 400) — phai qua Responses
+            // API moi giu duoc ca tools lan reasoning muc medium.
+            useResponsesApi: true,
+            reasoning: { effort: "medium" as const },
+          }
         : { temperature: 0.2 }),
     });
   }
