@@ -6,6 +6,7 @@ import {
 } from "@langchain/core/messages";
 import { Injectable } from "@nestjs/common";
 import { createAgent } from "langchain";
+import { BookingStateService } from "../booking/booking-state.service";
 import { BookingService } from "../booking/booking.service";
 import { CatalogService } from "../catalog/catalog.service";
 import type { Card } from "../common/cards";
@@ -24,7 +25,8 @@ QUY TẮC BẮT BUỘC:
 5. Khi người dùng nêu thời gian tương đối (ví dụ "sáng thứ 2", "cuối tuần này") hoặc đã chọn bác sĩ, hãy tự tra lịch bằng công cụ và suy ra ngày cụ thể gần nhất khớp mô tả, thay vì hỏi lại ngày chính xác; chỉ hỏi lại khi thông tin thật sự không đủ để tra cứu. Ngày luôn dùng định dạng YYYY-MM-DD khi gọi tool.
 6. Trả lời bằng tiếng Việt, ngắn gọn, thân thiện, tối đa khoảng 150 từ. Khi liệt kê bác sĩ/giờ khám, trình bày dạng danh sách ngắn kèm giá và nơi khám.
 7. Dữ liệu đặt lịch trong hệ thống này là MÔ PHỎNG phục vụ demo trên dữ liệu công khai của BookingCare; nếu người dùng hỏi, hãy nói rõ điều đó.
-8. Phạm vi hỗ trợ chỉ gồm tìm kiếm, hỏi đáp và đặt lịch khám. Với yêu cầu ngoài phạm vi (viết code, làm bài tập, dịch thuật, trò chuyện chung...), hãy từ chối ngắn gọn, lịch sự trong một câu và mời người dùng quay lại nhu cầu khám chữa bệnh.`;
+8. Phạm vi hỗ trợ chỉ gồm tìm kiếm, hỏi đáp và đặt lịch khám. Với yêu cầu ngoài phạm vi (viết code, làm bài tập, dịch thuật, trò chuyện chung...), hãy từ chối ngắn gọn, lịch sự trong một câu và mời người dùng quay lại nhu cầu khám chữa bệnh.
+9. Nếu trong hướng dẫn có mục TRẠNG THÁI ĐẶT LỊCH ĐÃ GHIM Ở BACKEND, hãy dùng đúng các dữ kiện đã ghim đó khi nói về bác sĩ/khung giờ đang chọn; chỉ gọi lại check_slots khi người dùng muốn đổi bác sĩ hoặc ngày khác.`;
 
 interface Session {
   messages: BaseMessage[];
@@ -90,8 +92,9 @@ export class AgentService {
     booking: BookingService,
     rag: RagService,
     private readonly llm: LlmService,
+    private readonly state: BookingStateService,
   ) {
-    this.tools = createTools({ catalog, booking, rag });
+    this.tools = createTools({ catalog, booking, rag, state });
   }
 
   private getSession(sessionId: string): Session {
@@ -150,6 +153,21 @@ export class AgentService {
       systemPrompt += `\n\nTóm tắt hội thoại trước đó với người dùng này: ${session.summary}`;
     }
 
+    // Trang thai dat lich da ghim o backend (may trang thai xac dinh):
+    // dua du kien da chon vao prompt de model khong tra cuu lai lam lech.
+    const st = await this.state.get(sessionId);
+    if (st && st.step !== "none" && st.doctorId) {
+      systemPrompt +=
+        `\n\nTRẠNG THÁI ĐẶT LỊCH ĐÃ GHIM Ở BACKEND (dữ kiện xác định — dùng đúng các dữ kiện này, KHÔNG tra cứu lại bác sĩ/slot đã ghim, chỉ thay đổi khi người dùng yêu cầu đổi rõ ràng): bác sĩ ${st.doctorName} (doctorId=${st.doctorId})` +
+        (st.date ? `, ngày ${st.date}` : "") +
+        (st.slotId
+          ? `, khung giờ đã chọn: ${st.timeLabel} tại ${st.facilityName} (slotId=${st.slotId})`
+          : "") +
+        (st.step === "booked"
+          ? `, ĐÃ ĐẶT LỊCH THÀNH CÔNG, mã ${st.bookingId} — không đặt lại.`
+          : "");
+    }
+
     const agent = createAgent({
       model,
       tools: this.tools,
@@ -169,7 +187,11 @@ export class AgentService {
 
     const stream = agent.streamEvents(
       { messages: inputMessages },
-      { version: "v2", recursionLimit: MAX_TOOL_ROUNDS * 4 + 4 },
+      {
+        version: "v2",
+        recursionLimit: MAX_TOOL_ROUNDS * 4 + 4,
+        configurable: { sessionId },
+      },
     );
 
     for await (const event of stream) {

@@ -1,5 +1,6 @@
 import { tool } from "@langchain/core/tools";
 import { z } from "zod";
+import type { BookingStateService } from "../booking/booking-state.service";
 import type { BookingService } from "../booking/booking.service";
 import type { CatalogService } from "../catalog/catalog.service";
 import { formatPrice, type Card } from "../common/cards";
@@ -9,6 +10,18 @@ export interface ToolDeps {
   catalog: CatalogService;
   booking: BookingService;
   rag: RagService;
+  state: BookingStateService;
+}
+
+/**
+ * sessionId duoc truyen qua LangChain runnable config (configurable.sessionId)
+ * tu AgentService. Khi chay tool ngoai luong chat (test) thi khong co ->
+ * bo qua moi thao tac trang thai.
+ */
+function sessionIdOf(config: unknown): string | undefined {
+  const sid = (config as { configurable?: { sessionId?: unknown } } | undefined)
+    ?.configurable?.sessionId;
+  return typeof sid === "string" && sid ? sid : undefined;
 }
 
 /**
@@ -28,7 +41,7 @@ export function createTools(deps: ToolDeps) {
         specialty,
         province,
         date,
-        limit,
+        limit: limit ?? 5,
       });
       if (!doctors.length) {
         return pack(
@@ -44,9 +57,7 @@ export function createTools(deps: ToolDeps) {
           .join("; ");
         return `- doctorId=${d.id} | ${d.name} | Chuyên khoa: ${d.specialties
           .map((s) => s.name)
-          .join(", ")} | ${d.province ?? ""} | Giá: ${price.priceLabel} | Nơi khám: ${facs} | ${
-          d.summary?.slice(0, 160) ?? ""
-        }`;
+          .join(", ")} | ${d.province ?? ""} | Giá: ${price.priceLabel} | Nơi khám: ${facs}`;
       });
       return pack(
         `Tìm thấy ${doctors.length} bác sĩ:\n${lines.join("\n")}\nDùng check_slots với doctorId và ngày (YYYY-MM-DD) để xem giờ trống.`,
@@ -123,17 +134,37 @@ export function createTools(deps: ToolDeps) {
   );
 
   const checkSlotsTool = tool(
-    async ({ doctorId, date }) => {
+    async ({ doctorId, date }, config) => {
       const result = await deps.booking.checkSlots(doctorId, date);
       if ("error" in result) return pack(result.error, []);
+      // Ghim bac si dang chon vao trang thai phien o backend (may trang thai)
+      const sessionId = sessionIdOf(config);
+      if (sessionId) {
+        await deps.state.pinDoctor(sessionId, {
+          doctorId: String(doctorId),
+          doctorName: result.doctor.name,
+          date,
+        });
+      }
       const avail = result.slots.filter((s) => s.status === "available");
-      const lines = result.slots.map(
-        (s) =>
-          `- slotId=${s.slotId} | ${s.label} | ${s.facilityName} | Giá: ${formatPrice(
-            s.priceMin,
-            s.priceMax,
-          )} | ${s.status === "available" ? "CÒN TRỐNG" : "HẾT CHỖ"}`,
-      );
+      const fullCount = result.slots.length - avail.length;
+      // Payload gon cho LLM: chi liet ke slot con trong, toi da 12 dong
+      // (card gui frontend van giu day du moi slot nhu cu).
+      const lines = avail
+        .slice(0, 12)
+        .map(
+          (s) =>
+            `- slotId=${s.slotId} | ${s.label} | ${s.facilityName} | Giá: ${formatPrice(
+              s.priceMin,
+              s.priceMax,
+            )} | CÒN TRỐNG`,
+        );
+      if (avail.length > 12) {
+        lines.push(`(+${avail.length - 12} khung giờ còn trống khác)`);
+      }
+      if (fullCount > 0) {
+        lines.push(`(+${fullCount} khung giờ đã hết chỗ)`);
+      }
       return pack(
         `Lịch khám của ${result.doctor.name} ngày ${date}: ${avail.length}/${result.slots.length} khung giờ còn trống.\n${lines.join("\n")}\nKhi người dùng chọn giờ và cung cấp họ tên + số điện thoại, dùng create_booking với đúng slotId.`,
         [result.card],
@@ -151,7 +182,20 @@ export function createTools(deps: ToolDeps) {
   );
 
   const createBookingTool = tool(
-    async ({ slotId, patientName, phone, idempotencyKey }) => {
+    async ({ slotId, patientName, phone, idempotencyKey }, config) => {
+      const sessionId = sessionIdOf(config);
+      // Guardrail xac dinh: invariant nhat quan bac si nam o BookingStateService,
+      // tool chi goi validateSlot va bao loi — chan agent lech du kien giua
+      // luong dat lich dai.
+      if (sessionId) {
+        const v = await deps.state.validateSlot(sessionId, slotId);
+        if (!v.ok) {
+          return pack(
+            `Đặt lịch KHÔNG thành công: slotId thuộc bác sĩ khác. Bác sĩ đã ghim cho phiên này là ${v.doctorName} (doctorId=${v.doctorId}). Chỉ đặt slot của bác sĩ này (dùng check_slots để lấy đúng slotId) hoặc người dùng phải yêu cầu đổi bác sĩ rõ ràng.`,
+            [],
+          );
+        }
+      }
       const result = await deps.booking.createBooking({
         slotId,
         patientName,
@@ -162,6 +206,14 @@ export function createTools(deps: ToolDeps) {
         return pack(`Đặt lịch KHÔNG thành công: ${result.error} (mã ${result.code})`, []);
       }
       const b = result.booking;
+      if (sessionId) {
+        await deps.state.pinSlot(sessionId, {
+          slotId: b.slotId,
+          timeLabel: b.timeLabel,
+          facilityName: b.facilityName,
+        });
+        await deps.state.markBooked(sessionId, b.bookingId);
+      }
       return pack(
         `Đặt lịch ${result.duplicated ? "đã tồn tại (trùng idempotency key, không tạo mới)" : "THÀNH CÔNG"}: mã ${b.bookingId}, bác sĩ ${b.doctorName}, ${b.facilityName}, ngày ${b.date} lúc ${b.timeLabel}, giá ${formatPrice(b.priceMin, b.priceMax)}, người khám ${b.patientName} (${b.phone}). Đây là đặt lịch mô phỏng trên dữ liệu mẫu.`,
         [result.card],

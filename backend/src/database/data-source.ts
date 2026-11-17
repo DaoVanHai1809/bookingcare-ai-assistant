@@ -12,6 +12,7 @@ import { ArticleChunkEntity } from "./entities/article-chunk.entity";
 import { BookingEntity } from "./entities/booking.entity";
 import { DoctorEntity } from "./entities/doctor.entity";
 import { FacilityEntity } from "./entities/facility.entity";
+import { SessionBookingStateEntity } from "./entities/session-booking-state.entity";
 import { SlotEntity } from "./entities/slot.entity";
 import { SpecialtyEntity } from "./entities/specialty.entity";
 
@@ -22,6 +23,7 @@ export const ALL_ENTITIES = [
   SlotEntity,
   BookingEntity,
   ArticleChunkEntity,
+  SessionBookingStateEntity,
 ];
 
 /**

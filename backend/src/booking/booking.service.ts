@@ -61,6 +61,11 @@ export class BookingService {
     return this.bookingRepo.count();
   }
 
+  /** Tra cuu xac dinh mot slot theo slotId (dung cho guardrail ghim bac si). */
+  async findSlot(slotId: string): Promise<SlotEntity | null> {
+    return this.slotRepo.findOneBy({ slotId: String(slotId) });
+  }
+
   async checkSlots(
     doctorId: string,
     date: string,
